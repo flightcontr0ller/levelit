@@ -11,22 +11,38 @@ public class MainActivity extends AppCompatActivity {
     // fields
     private Accelerometer accelerometer;
     private CalculatorLocal calculatorLocal;
+    private Bluetooth bluetooth;
     private TextView tv_alignment;
+    private TextView tv_rxdata;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        tv_alignment = (TextView)findViewById(R.id.tv_alignment);
         accelerometer = new Accelerometer(this);
         calculatorLocal = new CalculatorLocal();
+        bluetooth = new Bluetooth();
+        tv_alignment = (TextView)findViewById(R.id.tv_alignment);
+        tv_rxdata = (TextView)findViewById(R.id.tv_rxdata);
+
+        bluetooth.findBT();
+        try {
+            bluetooth.openBT();
+        } catch (Exception e){}
+
+        try {
+            bluetooth.beginListenForData();
+        } catch (Exception e){}
+
 
         accelerometer.setListener(new Accelerometer.Listener() {
             @Override
             public void onTranslation(float tx, float ty, float tz) {
                 calculatorLocal.get_data(tx, ty, tz);
 
+                tv_rxdata.setText(bluetooth.rxData);
+                // output local alignment
                 if(calculatorLocal.alignment == Alignment.UPWARD){
                     tv_alignment.setText("upward");
                 }
@@ -39,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
                 else if (calculatorLocal.alignment == Alignment.LEFTWARD){
                     tv_alignment.setText("leftward");
                 }
+
+
             }
         });
     }

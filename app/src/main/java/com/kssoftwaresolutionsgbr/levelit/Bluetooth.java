@@ -24,16 +24,21 @@ public class Bluetooth {
 
     // fields
     BluetoothAdapter mBluetoothAdapter;
-    private BluetoothSocket mmSocket;
-    private BluetoothDevice mmDevice;
-    private OutputStream mmOutputStream;
-    private InputStream mmInputStream;
+    BluetoothSocket mmSocket;
+    BluetoothDevice mmDevice;
+    OutputStream mmOutputStream;
+    InputStream mmInputStream;
     Thread workerThread;
+    public String rxData;
     private byte[] readBuffer;
     private int readBufferPosition;
     private int counter;
     private volatile boolean stopWorker;
 
+    // constructors
+    public Bluetooth(){
+        rxData = "";
+    }
 
     // methods
     public void findBT() {
@@ -63,7 +68,7 @@ public class Bluetooth {
         // Bluetooth Device Found
     }
 
-    public void openBT() throws IOException {
+    public void openBT() throws Exception {
         UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"); //Standard SerialPortService ID
         mmSocket = mmDevice.createRfcommSocketToServiceRecord(uuid);
         mmSocket.connect();
@@ -75,7 +80,7 @@ public class Bluetooth {
         // serial bluetooth communication opened
     }
 
-    public void beginListenForData() {
+    public void beginListenForData() throws Exception {
         final Handler handler = new Handler();
         final byte delimiter = 10; //This is the ASCII code for a newline character
 
@@ -109,6 +114,7 @@ public class Bluetooth {
                                     {
                                         public void run()
                                         {
+                                            rxData = data;
                                             // incoming text is stored in string "data"
                                         }
                                     });
