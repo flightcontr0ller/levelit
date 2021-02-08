@@ -11,8 +11,7 @@ public class MainActivity extends AppCompatActivity {
     // fields
     private Accelerometer accelerometer;
     private CalculatorLocal calculatorLocal;
-
-    TextView tv_alignment;
+    private TextView tv_alignment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,7 +19,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         tv_alignment = (TextView)findViewById(R.id.tv_alignment);
-
         accelerometer = new Accelerometer(this);
         calculatorLocal = new CalculatorLocal();
 
@@ -41,15 +39,6 @@ public class MainActivity extends AppCompatActivity {
                 else if (calculatorLocal.alignment == Alignment.LEFTWARD){
                     tv_alignment.setText("leftward");
                 }
-
-                /* testing of acc sensor
-                if(tx > 1.0f){
-                    getWindow().getDecorView().setBackgroundColor(Color.RED);
-                }
-                else if(tx < -1.0f){
-                    getWindow().getDecorView().setBackgroundColor(Color.BLUE);
-                }
-                */
             }
         });
     }
