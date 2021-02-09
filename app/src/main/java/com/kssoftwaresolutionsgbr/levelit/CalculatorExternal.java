@@ -21,19 +21,19 @@ public class CalculatorExternal {
     }
 
     // methods
-    public String getAngle(String rxData){
+    public String getAngle(String rxData) throws Exception {
         try{
-            return checkData(rxData);
+            return checkData(rxData).toString();
         } catch (Exception e){
-            return "faulty data";
+            throw e;
         }
     }
 
-    private String checkData(String rxData) throws Exception{
+    private Float checkData(String rxData) throws Exception{
         try{
             Float angle = Float.parseFloat(rxData.trim());
             if (angle <= 180 && angle >= -180){
-                return angle.toString();
+                return angle;
             }
             else {
                 throw new Exception();

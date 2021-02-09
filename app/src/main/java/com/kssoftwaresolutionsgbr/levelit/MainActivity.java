@@ -17,6 +17,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.android.material.snackbar.Snackbar;
+
 public class MainActivity extends AppCompatActivity {
 
     // fields
@@ -28,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Button bt_nav_settings;
     private TextView tv_angle;
+
 
     // methods
     @Override
@@ -67,7 +70,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTranslation(float tx, float ty, float tz) {
                 if(!use_external_sensor){
-                    tv_angle.setText(calculatorLocal.getAngle(tx, ty));
+                    try{
+                        tv_angle.setText(calculatorLocal.getAngle(tx, ty));
+                    } catch (Exception e){
+                        tv_angle.setText("");
+                        Snackbar.make(findViewById(R.id.main_activity), R.string.warning_local_sensor, Snackbar.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
@@ -76,7 +84,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChange() {
                 if(use_external_sensor){
-                    tv_angle.setText(calculatorExternal.getAngle(bluetooth.rxData));
+                    try{
+                        tv_angle.setText(calculatorExternal.getAngle(bluetooth.rxData));
+                    } catch (Exception e){
+                        tv_angle.setText("");
+                        Snackbar.make(findViewById(R.id.main_activity), R.string.warning_external_sensor, Snackbar.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
@@ -102,4 +115,5 @@ public class MainActivity extends AppCompatActivity {
             bluetooth.closeBT();
         } catch (Exception e){}
     }
+
 }

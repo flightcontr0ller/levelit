@@ -23,13 +23,13 @@ public class CalculatorLocal {
     }
 
     // methods
-    public String getAngle(float mx, float my){
+    public String getAngle(float mx, float my) throws Exception {
         try{
             getAlignment(mx, my);
             calcAngle();
             return String.valueOf(angle);
         } catch (Exception e){
-            return "faulty values";
+            throw e;
         }
     }
 

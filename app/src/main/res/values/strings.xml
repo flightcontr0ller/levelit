@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">levelit</string>
+    <string name="settings">settings</string>
+    <string name="no_data_available">no data available</string>
+    <string name="use_external_sensor">use external sensor</string>
+    <string name="back">back</string>
+    <string name="warning_local_sensor">The data from the local sensor is invalid.</string>
+    <string name="warning_external_sensor">The data from the external sensor is invalid. Please check your connection.</string>
 </resources>
