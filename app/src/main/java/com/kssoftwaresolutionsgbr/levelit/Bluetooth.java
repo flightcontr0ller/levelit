@@ -30,14 +30,15 @@ public class Bluetooth {
     InputStream mmInputStream;
     Thread workerThread;
     public String rxData;
+    public String debugMsg;
     private byte[] readBuffer;
     private int readBufferPosition;
-    private int counter;
-    private volatile boolean stopWorker;
+    private volatile boolean stopThread;
 
     // constructors
     public Bluetooth(){
         rxData = "";
+        debugMsg = "";
     }
 
     // methods
@@ -45,12 +46,12 @@ public class Bluetooth {
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if(mBluetoothAdapter == null)
         {
-            // No bluetooth adapter available
+            debugMsg = "No bluetooth adapter available";
         }
 
         if(!mBluetoothAdapter.isEnabled())
         {
-            // Bluetooth is disabled
+            debugMsg = "Bluetooth is disabled";
         }
 
         Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
@@ -65,7 +66,7 @@ public class Bluetooth {
                 }
             }
         }
-        // Bluetooth Device Found
+        debugMsg = "External sensor was found in paired devices";
     }
 
     public void openBT() throws Exception {
@@ -74,24 +75,22 @@ public class Bluetooth {
         mmSocket.connect();
         mmOutputStream = mmSocket.getOutputStream();
         mmInputStream = mmSocket.getInputStream();
-
-        beginListenForData();
-
-        // serial bluetooth communication opened
+        readData();
+        debugMsg = "Serial bluetooth communication opened";
     }
 
-    public void beginListenForData() throws Exception {
+    private void readData() throws Exception {
         final Handler handler = new Handler();
         final byte delimiter = 10; //This is the ASCII code for a newline character
 
-        stopWorker = false;
+        stopThread = false;
         readBufferPosition = 0;
         readBuffer = new byte[1024];
         workerThread = new Thread(new Runnable()
         {
             public void run()
             {
-                while(!Thread.currentThread().isInterrupted() && !stopWorker)
+                while(!Thread.currentThread().isInterrupted() && !stopThread)
                 {
                     try
                     {
@@ -128,7 +127,7 @@ public class Bluetooth {
                     }
                     catch (IOException ex)
                     {
-                        stopWorker = true;
+                        stopThread = true;
                     }
                 }
             }
@@ -141,14 +140,15 @@ public class Bluetooth {
         String msg = "message";
         msg += "\n";
         mmOutputStream.write(msg.getBytes());
+        debugMsg = "Data is sent to bluetooth device";
     }
 
     public void closeBT() throws IOException {
-        stopWorker = true;
+        stopThread = true;
         mmOutputStream.close();
         mmInputStream.close();
         mmSocket.close();
-        // Bluetooth Closed
+        debugMsg = "Bluetooth connection closed";
     }
 }
 

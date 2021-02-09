@@ -2,7 +2,6 @@ package com.kssoftwaresolutionsgbr.levelit;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -14,6 +13,7 @@ public class MainActivity extends AppCompatActivity {
     private Bluetooth bluetooth;
     private TextView tv_alignment;
     private TextView tv_rxdata;
+    private TextView tv_btdebug;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,17 +23,16 @@ public class MainActivity extends AppCompatActivity {
         accelerometer = new Accelerometer(this);
         calculatorLocal = new CalculatorLocal();
         bluetooth = new Bluetooth();
+
         tv_alignment = (TextView)findViewById(R.id.tv_alignment);
         tv_rxdata = (TextView)findViewById(R.id.tv_rxdata);
+        tv_btdebug = (TextView)findViewById(R.id.tv_btdebug);
 
         bluetooth.findBT();
         try {
             bluetooth.openBT();
         } catch (Exception e){}
 
-        try {
-            bluetooth.beginListenForData();
-        } catch (Exception e){}
 
 
         accelerometer.setListener(new Accelerometer.Listener() {
@@ -42,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
                 calculatorLocal.get_data(tx, ty, tz);
 
                 tv_rxdata.setText(bluetooth.rxData);
+                tv_btdebug.setText(bluetooth.debugMsg);
+
                 // output local alignment
                 if(calculatorLocal.alignment == Alignment.UPWARD){
                     tv_alignment.setText("upward");
@@ -71,5 +72,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         accelerometer.unregister();
+
+        try {
+            bluetooth.closeBT();
+        } catch (Exception e){}
     }
 }
