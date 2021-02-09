@@ -35,6 +35,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // catch intent from settings
+        use_external_sensor = getIntent().getBooleanExtra("use_external_sensor",false);
+
+        // create button and textview
         bt_nav_settings = findViewById(R.id.bt_nav_settings);
         bt_nav_settings.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -44,12 +48,15 @@ public class MainActivity extends AppCompatActivity {
         });
         tv_angle = findViewById(R.id.tv_angle);
 
-        use_external_sensor = false;
+        // create objects
         accelerometer = new Accelerometer(this);
         calculatorLocal = new CalculatorLocal();
         bluetooth = new Bluetooth();
         calculatorExternal = new CalculatorExternal();
-/*
+
+
+
+        /*
         bluetooth.findBT();
         try {
             bluetooth.openBT();
@@ -66,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void open_settings_activity(){
         Intent intent = new Intent(this, SettingsActivity.class);
+        intent.putExtra("use_external_sensor", use_external_sensor);
         startActivity(intent);
     }
 
