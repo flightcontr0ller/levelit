@@ -27,12 +27,12 @@ public class MainActivity extends AppCompatActivity {
         tv_alignment = (TextView)findViewById(R.id.tv_alignment);
         tv_rxdata = (TextView)findViewById(R.id.tv_rxdata);
         tv_btdebug = (TextView)findViewById(R.id.tv_btdebug);
-
+/*
         bluetooth.findBT();
         try {
             bluetooth.openBT();
         } catch (Exception e){}
-
+*/
 
 
         accelerometer.setListener(new Accelerometer.Listener() {
