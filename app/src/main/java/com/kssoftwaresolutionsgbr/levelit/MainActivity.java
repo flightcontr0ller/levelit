@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         // catch intent from settings
         use_external_sensor = getIntent().getBooleanExtra("use_external_sensor",false);
 
-        // create button and textview
+        // create button and textView
         bt_nav_settings = findViewById(R.id.bt_nav_settings);
         bt_nav_settings.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,19 +54,34 @@ public class MainActivity extends AppCompatActivity {
         bluetooth = new Bluetooth();
         calculatorExternal = new CalculatorExternal();
 
+        // start Bluetooth if needed
+        if(use_external_sensor){
+            try {
+                bluetooth.findBT();
+                bluetooth.openBT();
+            } catch (Exception e){}
+        }
 
-
-        /*
-        bluetooth.findBT();
-        try {
-            bluetooth.openBT();
-        } catch (Exception e){}
-*/
-
+        // listeners
         accelerometer.setListener(new Accelerometer.Listener() {
             @Override
             public void onTranslation(float tx, float ty, float tz) {
                 calculatorLocal.get_data(tx, ty, tz);
+                if(!use_external_sensor){
+                    tv_angle.setText(Float.toString(calculatorLocal.angle));
+                }
+            }
+        });
+
+        bluetooth.setListener(new Bluetooth.ChangeListener() {
+            @Override
+            public void onChange() {
+                try{
+                    calculatorExternal.get_data(bluetooth.rxData);
+                }catch (Exception e){}
+                if(use_external_sensor){
+                    tv_angle.setText(Float.toString(calculatorExternal.angle));
+                }
             }
         });
     }
@@ -87,7 +102,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         accelerometer.unregister();
-
         try {
             bluetooth.closeBT();
         } catch (Exception e){}

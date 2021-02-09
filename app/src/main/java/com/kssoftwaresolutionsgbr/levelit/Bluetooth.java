@@ -23,6 +23,7 @@ import java.util.UUID;
 public class Bluetooth {
 
     // fields
+    public static final String BluetoothDevice = "HC-06";
     BluetoothAdapter mBluetoothAdapter;
     BluetoothSocket mmSocket;
     BluetoothDevice mmDevice;
@@ -35,6 +36,8 @@ public class Bluetooth {
     private int readBufferPosition;
     private volatile boolean stopThread;
 
+    private ChangeListener listener;
+
     // constructors
     public Bluetooth(){
         rxData = "";
@@ -42,7 +45,7 @@ public class Bluetooth {
     }
 
     // methods
-    public void findBT() {
+    public void findBT() throws Exception{
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if(mBluetoothAdapter == null)
         {
@@ -59,7 +62,7 @@ public class Bluetooth {
         {
             for(BluetoothDevice device : pairedDevices)
             {
-                if(device.getName().equals("HC-06"))
+                if(device.getName().equals(BluetoothDevice))
                 {
                     mmDevice = device;
                     break;
@@ -113,7 +116,7 @@ public class Bluetooth {
                                     {
                                         public void run()
                                         {
-                                            rxData = data;
+                                            setRxData(data);
                                             // incoming text is stored in string "data"
                                         }
                                     });
@@ -149,6 +152,28 @@ public class Bluetooth {
         mmInputStream.close();
         mmSocket.close();
         debugMsg = "Bluetooth connection closed";
+    }
+
+    // methods for rxData calling listener
+    public String getRxData() {
+        return rxData;
+    }
+
+    private void setRxData(String data) {
+        this.rxData = data;
+        if (listener != null) listener.onChange();
+    }
+
+    public ChangeListener getListener() {
+        return listener;
+    }
+
+    public void setListener(ChangeListener listener) {
+        this.listener = listener;
+    }
+
+    public interface ChangeListener {
+        void onChange();
     }
 }
 

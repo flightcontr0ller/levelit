@@ -14,7 +14,7 @@ public class CalculatorLocal {
 
     // fields
     public float angle;
-    public Alignment alignment;
+    private Alignment alignment;
     private float accX, accY, accZ;
 
     // constructors

@@ -19,7 +19,7 @@
         android:id="@+id/tv_angle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
+        android:text="no data available"
         app:layout_constraintBottom_toTopOf="@+id/bt_nav_settings"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
