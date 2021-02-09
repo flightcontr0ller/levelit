@@ -13,9 +13,8 @@ package com.kssoftwaresolutionsgbr.levelit;
 public class CalculatorLocal {
 
     // fields
-    public float angle;
+    private float angle;
     private Alignment alignment;
-    private float accX, accY, accZ;
 
     // constructors
     public CalculatorLocal() {
@@ -24,16 +23,17 @@ public class CalculatorLocal {
     }
 
     // methods
-    public void get_data(float mx, float my, float mz){
-        accX = mx;
-        accY = my;
-        accZ = mz;
-
-        get_alignment();
-        get_angle();
+    public String getAngle(float mx, float my){
+        try{
+            getAlignment(mx, my);
+            calcAngle();
+            return String.valueOf(angle);
+        } catch (Exception e){
+            return "faulty values";
+        }
     }
 
-    private void get_alignment() {
+    private void getAlignment(float accX, float accY) throws Exception{
         if (accX >= 0 && accY >= 0) {
             if (accY > accX) {
                 alignment = Alignment.UPWARD;
@@ -60,9 +60,27 @@ public class CalculatorLocal {
             }
         } else{
             alignment = Alignment.NOTDEFIEND;
+            throw new Exception();
         }
     }
-    private void get_angle(){
-        angle = 42;
+
+    private void calcAngle() throws Exception{
+
+        // insert calculation here ----
+        if (alignment == Alignment.LEFTWARD){
+            angle = 30;
+        }
+        else if (alignment == Alignment.RIGHTWARD){
+            angle = -20;
+        }
+        else {
+            angle = 42;
+        }
+        // ----------------------------
+
+        if(angle < 45 && angle > -45){}
+        else {
+            throw new Exception();
+        }
     }
 }

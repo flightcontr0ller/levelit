@@ -13,20 +13,34 @@ package com.kssoftwaresolutionsgbr.levelit;
 public class CalculatorExternal {
 
     // fields
-    public float angle;
+    private String angle;
 
     // constructors
     public CalculatorExternal(){
-        angle = 0;
+
     }
 
     // methods
-    public void get_data(String rxData) throws Exception{
+    public String getAngle(String rxData){
         try{
-            angle = Integer.parseInt(rxData);
+            return checkData(rxData);
+        } catch (Exception e){
+            return "faulty data";
+        }
+    }
+
+    private String checkData(String rxData) throws Exception{
+        try{
+            Float angle = Float.parseFloat(rxData.trim());
+            if (angle <= 180 && angle >= -180){
+                return angle.toString();
+            }
+            else {
+                throw new Exception();
+            }
         }
         catch (Exception e){
-            angle = 0;
+            throw e;
         }
     }
 }

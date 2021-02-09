@@ -66,9 +66,8 @@ public class MainActivity extends AppCompatActivity {
         accelerometer.setListener(new Accelerometer.Listener() {
             @Override
             public void onTranslation(float tx, float ty, float tz) {
-                calculatorLocal.get_data(tx, ty, tz);
                 if(!use_external_sensor){
-                    tv_angle.setText(Float.toString(calculatorLocal.angle));
+                    tv_angle.setText(calculatorLocal.getAngle(tx, ty));
                 }
             }
         });
@@ -76,11 +75,8 @@ public class MainActivity extends AppCompatActivity {
         bluetooth.setListener(new Bluetooth.ChangeListener() {
             @Override
             public void onChange() {
-                try{
-                    calculatorExternal.get_data(bluetooth.rxData);
-                }catch (Exception e){}
                 if(use_external_sensor){
-                    tv_angle.setText(Float.toString(calculatorExternal.angle));
+                    tv_angle.setText(calculatorExternal.getAngle(bluetooth.rxData));
                 }
             }
         });
