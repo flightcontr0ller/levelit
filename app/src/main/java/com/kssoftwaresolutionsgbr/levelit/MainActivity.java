@@ -1,8 +1,20 @@
+/*
+ ************************************************
+ * project:      levelit
+ * package name: com.kssoftwaresolutionsgbr.levelit
+ * class:        MainActivity
+ * dev:          Malte Schoenert
+ * created on:   2021-02-08
+ ************************************************
+ */
 package com.kssoftwaresolutionsgbr.levelit;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
@@ -11,22 +23,32 @@ public class MainActivity extends AppCompatActivity {
     private Accelerometer accelerometer;
     private CalculatorLocal calculatorLocal;
     private Bluetooth bluetooth;
-    private TextView tv_alignment;
-    private TextView tv_rxdata;
-    private TextView tv_btdebug;
+    private CalculatorExternal calculatorExternal;
+    private boolean use_external_sensor;
 
+    private Button bt_nav_settings;
+    private TextView tv_angle;
+
+    // methods
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        bt_nav_settings = findViewById(R.id.bt_nav_settings);
+        bt_nav_settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                open_settings_activity();
+            }
+        });
+        tv_angle = findViewById(R.id.tv_angle);
+
+        use_external_sensor = false;
         accelerometer = new Accelerometer(this);
         calculatorLocal = new CalculatorLocal();
         bluetooth = new Bluetooth();
-
-        tv_alignment = (TextView)findViewById(R.id.tv_alignment);
-        tv_rxdata = (TextView)findViewById(R.id.tv_rxdata);
-        tv_btdebug = (TextView)findViewById(R.id.tv_btdebug);
+        calculatorExternal = new CalculatorExternal();
 /*
         bluetooth.findBT();
         try {
@@ -34,32 +56,17 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e){}
 */
 
-
         accelerometer.setListener(new Accelerometer.Listener() {
             @Override
             public void onTranslation(float tx, float ty, float tz) {
                 calculatorLocal.get_data(tx, ty, tz);
-
-                tv_rxdata.setText(bluetooth.rxData);
-                tv_btdebug.setText(bluetooth.debugMsg);
-
-                // output local alignment
-                if(calculatorLocal.alignment == Alignment.UPWARD){
-                    tv_alignment.setText("upward");
-                }
-                else if (calculatorLocal.alignment == Alignment.DOWNWARD){
-                    tv_alignment.setText("downward");
-                }
-                else if (calculatorLocal.alignment == Alignment.RIGHTWARD){
-                    tv_alignment.setText("rightward");
-                }
-                else if (calculatorLocal.alignment == Alignment.LEFTWARD){
-                    tv_alignment.setText("leftward");
-                }
-
-
             }
         });
+    }
+
+    private void open_settings_activity(){
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
     }
 
     @Override
