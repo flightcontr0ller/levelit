@@ -21,9 +21,9 @@ public class CalculatorExternal {
     }
 
     // methods
-    public String getAngle(String rxData) throws Exception {
+    public Float getAngle(String rxData) throws Exception {
         try{
-            return checkData(rxData).toString();
+            return checkData(rxData);
         } catch (Exception e){
             throw e;
         }

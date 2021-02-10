@@ -22,12 +22,13 @@ import com.google.android.material.snackbar.Snackbar;
 public class MainActivity extends AppCompatActivity {
 
     // fields
+    /*
     private Accelerometer accelerometer;
     private CalculatorLocal calculatorLocal;
     private Bluetooth bluetooth;
     private CalculatorExternal calculatorExternal;
     private boolean use_external_sensor;
-
+*/
     private Button bt_nav_settings;
     private TextView tv_angle;
 
@@ -39,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // catch intent from settings
-        use_external_sensor = getIntent().getBooleanExtra("use_external_sensor",false);
+        //use_external_sensor = getIntent().getBooleanExtra("use_external_sensor",false);
 
         // create button and textView
         bt_nav_settings = findViewById(R.id.bt_nav_settings);
@@ -52,11 +53,14 @@ public class MainActivity extends AppCompatActivity {
         tv_angle = findViewById(R.id.tv_angle);
 
         // create objects
+        /*
         accelerometer = new Accelerometer(this);
         calculatorLocal = new CalculatorLocal();
         bluetooth = new Bluetooth();
         calculatorExternal = new CalculatorExternal();
+        */
 
+        /*
         // start Bluetooth if needed
         if(use_external_sensor){
             try {
@@ -80,13 +84,16 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        */
+
         // listeners
+        /*
         accelerometer.setListener(new Accelerometer.Listener() {
             @Override
             public void onTranslation(float tx, float ty, float tz) {
                 if(!use_external_sensor){
                     try{
-                        tv_angle.setText(calculatorLocal.getAngle(tx, ty));
+                        //tv_angle.setText(calculatorLocal.getAngle(tx, ty));
                     } catch (Exception e){
                         tv_angle.setText("");
                         Snackbar.make(findViewById(R.id.main_activity), R.string.warning_local_sensor, Snackbar.LENGTH_SHORT).show();
@@ -100,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
             public void onChange() {
                 if(use_external_sensor){
                     try{
-                        tv_angle.setText(calculatorExternal.getAngle(bluetooth.getRxData()));
+                        //tv_angle.setText(calculatorExternal.getAngle(bluetooth.getRxData()));
                     } catch (Exception e){
                         tv_angle.setText("");
                         Snackbar.make(findViewById(R.id.main_activity), R.string.warning_external_sensor, Snackbar.LENGTH_SHORT).show();
@@ -108,24 +115,26 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+         */
     }
 
     private void open_settings_activity(){
         Intent intent = new Intent(this, SettingsActivity.class);
-        intent.putExtra("use_external_sensor", use_external_sensor);
+        //intent.putExtra("use_external_sensor", use_external_sensor);
         startActivity(intent);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        accelerometer.register();
+        //accelerometer.register();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        accelerometer.unregister();
+        //accelerometer.unregister();
     }
 
 }
