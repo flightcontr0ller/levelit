@@ -29,12 +29,12 @@ public class Bluetooth {
     BluetoothDevice mmDevice;
     OutputStream mmOutputStream;
     InputStream mmInputStream;
-    Thread workerThread;
+    Thread BluetoothThread;
     private String rxData;
     public String debugMsg;
     private byte[] readBuffer;
     private int readBufferPosition;
-    private volatile boolean stopThread;
+    private volatile boolean stopBluetoothThread;
 
     private ChangeListener listener;
 
@@ -45,7 +45,7 @@ public class Bluetooth {
     }
 
     // methods
-    public void findBT() throws BluetoothException{
+    public void findDevice() throws BluetoothException{
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if(mBluetoothAdapter == null)
         {
@@ -79,38 +79,39 @@ public class Bluetooth {
         }
     }
 
-    public void openBT() throws BluetoothException{
-        try {
-            UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"); //Standard SerialPortService ID
-            mmSocket = mmDevice.createRfcommSocketToServiceRecord(uuid);
-            mmSocket.connect();
-            mmOutputStream = mmSocket.getOutputStream();
-            mmInputStream = mmSocket.getInputStream();
-        } catch (IOException e){
-            throw new BluetoothException("Error: can't open bluetooth connection");
-        }
+    public void connectDevice() throws BluetoothException{
+            try {
+                UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"); //Standard SerialPortService ID
+                mmSocket = mmDevice.createRfcommSocketToServiceRecord(uuid);
+                mmSocket.connect();
+                mmOutputStream = mmSocket.getOutputStream();
+                mmInputStream = mmSocket.getInputStream();
+            } catch (IOException e){
+                throw new BluetoothException("Error: can't open bluetooth connection");
+            }
 
-        try {
-            readData();
-        } catch (Exception e){
-            throw new BluetoothException("Error: can't read bluetooth data");
-        }
+            try {
+                readData();
+            } catch (Exception e){
+                throw new BluetoothException("Error: can't read bluetooth data");
+            }
 
-        debugMsg = "Serial bluetooth communication opened";
+            debugMsg = "Serial bluetooth communication opened";
     }
 
     private void readData() {
         final Handler handler = new Handler();
-        final byte delimiter = 10; //This is the ASCII code for a newline character
+        final byte delimiter = 10; //  ASCII code for a newline character
 
-        stopThread = false;
+        stopBluetoothThread = false;
         readBufferPosition = 0;
         readBuffer = new byte[1024];
-        workerThread = new Thread(new Runnable()
+
+        BluetoothThread = new Thread(new Runnable()
         {
             public void run()
             {
-                while(!Thread.currentThread().isInterrupted() && !stopThread)
+                while(!Thread.currentThread().isInterrupted() && !stopBluetoothThread)
                 {
                     try
                     {
@@ -147,17 +148,12 @@ public class Bluetooth {
                     }
                     catch (IOException e)
                     {
-                        stopThread = true;
-                        try {
-                            throw e;
-                        } catch (IOException ioException) {
-                            ioException.printStackTrace();
-                        }
+                        stopBluetoothThread = true;
                     }
                 }
             }
         });
-        workerThread.start();
+        BluetoothThread.start();
     }
 
     public void sendData() throws IOException {
@@ -169,7 +165,7 @@ public class Bluetooth {
 
     public void closeBT() throws BluetoothException {
         try {
-            stopThread = true;
+            stopBluetoothThread = true;
             mmOutputStream.close();
             mmInputStream.close();
             mmSocket.close();

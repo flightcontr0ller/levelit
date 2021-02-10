@@ -60,8 +60,17 @@ public class MainActivity extends AppCompatActivity {
         // start Bluetooth if needed
         if(use_external_sensor){
             try {
-                bluetooth.findBT();
-                bluetooth.openBT();
+                bluetooth.findDevice();
+                bluetooth.connectDevice();
+            } catch (BluetoothException e){
+                Snackbar.make(findViewById(R.id.main_activity), e.getMessage(), Snackbar.LENGTH_SHORT).show();
+            }
+        }
+
+        // stop Bluetooth if needed
+        if(!use_external_sensor){
+            try {
+                bluetooth.closeBT();
             } catch (BluetoothException e){
                 Snackbar.make(findViewById(R.id.main_activity), e.getMessage(), Snackbar.LENGTH_SHORT).show();
             }
@@ -113,11 +122,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         accelerometer.unregister();
-        try {
-            bluetooth.closeBT();
-        } catch (BluetoothException e){
-            Snackbar.make(findViewById(R.id.main_activity), e.getMessage(), Snackbar.LENGTH_SHORT).show();
-        }
     }
 
 }
