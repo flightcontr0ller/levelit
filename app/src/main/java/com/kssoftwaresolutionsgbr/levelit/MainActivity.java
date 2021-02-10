@@ -60,8 +60,10 @@ public class MainActivity extends AppCompatActivity {
         // start Bluetooth if needed
         if(use_external_sensor){
             try {
-                bluetooth.findDevice();
-                bluetooth.connectDevice();
+                if(!bluetooth.getIsBtThreadRunning()){
+                    bluetooth.findDevice();
+                    bluetooth.connectDevice();
+                }
             } catch (BluetoothException e){
                 Snackbar.make(findViewById(R.id.main_activity), e.getMessage(), Snackbar.LENGTH_SHORT).show();
             }
@@ -70,7 +72,9 @@ public class MainActivity extends AppCompatActivity {
         // stop Bluetooth if needed
         if(!use_external_sensor){
             try {
-                bluetooth.closeBT();
+                if(bluetooth.getIsBtThreadRunning()){
+                    bluetooth.closeBT();
+                }
             } catch (BluetoothException e){
                 Snackbar.make(findViewById(R.id.main_activity), e.getMessage(), Snackbar.LENGTH_SHORT).show();
             }

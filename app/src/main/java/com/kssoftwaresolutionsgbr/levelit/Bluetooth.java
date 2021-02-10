@@ -24,24 +24,24 @@ public class Bluetooth {
 
     // fields
     public static final String BluetoothDevice = "HC-06";
+
     BluetoothAdapter mBluetoothAdapter;
     BluetoothSocket mmSocket;
     BluetoothDevice mmDevice;
     OutputStream mmOutputStream;
     InputStream mmInputStream;
     Thread BluetoothThread;
+
     private String rxData;
-    public String debugMsg;
     private byte[] readBuffer;
     private int readBufferPosition;
     private volatile boolean stopBluetoothThread;
-
+    private boolean IsBtThreadRunning;
     private ChangeListener listener;
 
     // constructors
     public Bluetooth(){
         rxData = "";
-        debugMsg = "";
     }
 
     // methods
@@ -96,11 +96,19 @@ public class Bluetooth {
                 throw new BluetoothException("Error: can't read bluetooth data");
             }
 
-            debugMsg = "Serial bluetooth communication opened";
+            // "Serial bluetooth communication opened";
     }
 
     private void readData() {
-        final Handler handler = new Handler();
+
+        /*
+        Thread explanation:
+        multiple thread object can run parallel
+        Runnables are packages of work, which can be passed as an argument
+        Handler is an object to communicate between threads
+         */
+
+        final Handler mainHandler = new Handler();
         final byte delimiter = 10; //  ASCII code for a newline character
 
         stopBluetoothThread = false;
@@ -130,12 +138,11 @@ public class Bluetooth {
                                     final String data = new String(encodedBytes, "US-ASCII");
                                     readBufferPosition = 0;
 
-                                    handler.post(new Runnable()
+                                    mainHandler.post(new Runnable()
                                     {
                                         public void run()
                                         {
                                             setRxData(data);
-                                            // incoming text is stored in string "data"
                                         }
                                     });
                                 }
@@ -150,9 +157,29 @@ public class Bluetooth {
                     {
                         stopBluetoothThread = true;
                     }
+                    finally {
+                        if(!stopBluetoothThread){
+                            mainHandler.post(new Runnable()
+                            {
+                                public void run()
+                                {
+                                    setIsBtThreadRunning(true);                                }
+                            });
+                        }
+                        else {
+                            mainHandler.post(new Runnable()
+                            {
+                                public void run()
+                                {
+                                    setIsBtThreadRunning(false);
+                                }
+                            });
+                        }
+                    }
                 }
             }
         });
+
         BluetoothThread.start();
     }
 
@@ -160,7 +187,7 @@ public class Bluetooth {
         String msg = "message";
         msg += "\n";
         mmOutputStream.write(msg.getBytes());
-        debugMsg = "Data is sent to bluetooth device";
+        // "Data is sent to bluetooth device"
     }
 
     public void closeBT() throws BluetoothException {
@@ -194,6 +221,14 @@ public class Bluetooth {
 
     public interface ChangeListener {
         void onChange();
+    }
+
+    public boolean getIsBtThreadRunning(){
+        return IsBtThreadRunning;
+    }
+
+    private void setIsBtThreadRunning(boolean data){
+        IsBtThreadRunning = data;
     }
 }
 
