@@ -62,7 +62,9 @@ public class MainActivity extends AppCompatActivity {
             try {
                 bluetooth.findBT();
                 bluetooth.openBT();
-            } catch (Exception e){}
+            } catch (BluetoothException e){
+                Snackbar.make(findViewById(R.id.main_activity), e.getMessage(), Snackbar.LENGTH_SHORT).show();
+            }
         }
 
         // listeners
@@ -85,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
             public void onChange() {
                 if(use_external_sensor){
                     try{
-                        tv_angle.setText(calculatorExternal.getAngle(bluetooth.rxData));
+                        tv_angle.setText(calculatorExternal.getAngle(bluetooth.getRxData()));
                     } catch (Exception e){
                         tv_angle.setText("");
                         Snackbar.make(findViewById(R.id.main_activity), R.string.warning_external_sensor, Snackbar.LENGTH_SHORT).show();
@@ -113,7 +115,9 @@ public class MainActivity extends AppCompatActivity {
         accelerometer.unregister();
         try {
             bluetooth.closeBT();
-        } catch (Exception e){}
+        } catch (BluetoothException e){
+            Snackbar.make(findViewById(R.id.main_activity), e.getMessage(), Snackbar.LENGTH_SHORT).show();
+        }
     }
 
 }
