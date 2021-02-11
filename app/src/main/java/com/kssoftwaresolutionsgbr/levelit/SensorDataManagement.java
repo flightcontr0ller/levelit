@@ -12,23 +12,20 @@ package com.kssoftwaresolutionsgbr.levelit;
 
 import android.app.Application;
 
-import com.google.android.material.snackbar.Snackbar;
-
 public class SensorDataManagement extends Application {
 /*
 This Class is the backend of this app. Bluetooth data and local sensor readings get controlled from here.
-
  */
 
     // fields
     private Accelerometer accelerometer;
-    private CalculatorLocal calculatorLocal;
-    private Bluetooth bluetooth;
-    private CalculatorExternal calculatorExternal;
-    private Float local_X, local_Y, local_Z;
     private Float local_Angle;
+
+    private Bluetooth bluetooth;
+    private DataProcessing dataProcessing;
     private Float external_Angle;
 
+    public Float Angle;
     public boolean use_external_sensor;
 
     // methods
@@ -36,30 +33,29 @@ This Class is the backend of this app. Bluetooth data and local sensor readings 
     public void onCreate() {
         super.onCreate();
         accelerometer = new Accelerometer(this);
-        calculatorLocal = new CalculatorLocal();
         bluetooth = new Bluetooth();
-        calculatorExternal = new CalculatorExternal();
+        dataProcessing = new DataProcessing();
+
+        use_external_sensor = true;
 
         accelerometer.setListener(new Accelerometer.Listener() {
             @Override
             public void onTranslation(float tx, float ty, float tz) {
                 if(!use_external_sensor){
                     try{
-                        local_Angle = calculatorLocal.getAngle(tx, ty);
+                        local_Angle = dataProcessing.getAngle(tx, ty);
                     } catch (Exception e){}
                 }
             }
         });
-
-        accelerometer.register();
 
         bluetooth.setListener(new Bluetooth.ChangeListener() {
             @Override
             public void onChange() {
                 if(use_external_sensor){
                     try{
-                        external_Angle = calculatorExternal.getAngle(bluetooth.getRxData());
-                    } catch (Exception e){
+                        external_Angle = dataProcessing.getAngle(bluetooth.rxData);
+                    } catch (DataProcessingException e){
                     }
                 }
             }
@@ -67,5 +63,30 @@ This Class is the backend of this app. Bluetooth data and local sensor readings 
 
     }
 
+    public String getAngle(){
+        if(use_external_sensor){
+            return Float.toString(external_Angle);
+        }
+        else{
+            return Float.toString(local_Angle);
+        }
+    }
+
+    public void stop_sensor(){
+        accelerometer.unregister();
+    }
+
+    public void start_sensor(){
+        if(use_external_sensor){
+            try {
+                bluetooth.openConnection();
+            } catch (BluetoothException e) {
+                e.printStackTrace();
+            }
+        }
+        else{
+            accelerometer.register();
+        }
+    }
 
 }

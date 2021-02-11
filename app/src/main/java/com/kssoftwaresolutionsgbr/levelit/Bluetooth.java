@@ -21,6 +21,12 @@ import java.util.Set;
 import java.util.UUID;
 
 public class Bluetooth {
+    /*
+    This class includes all methods to establish a bluetooth connection to the external sensor and sending as well as receiving data.
+    The bluetooth SSID of the external sensor is set in the variable BluetoothDevice.
+    To start receiving data run: findDevice(), connectDevice()
+    To stop receiving data run: closeConnection()
+     */
 
     // fields
     public static final String BluetoothDevice = "HC-06";
@@ -32,11 +38,11 @@ public class Bluetooth {
     InputStream mmInputStream;
     Thread BluetoothThread;
 
-    private String rxData;
+    public String rxData;
+
     private byte[] readBuffer;
     private int readBufferPosition;
     private volatile boolean stopBluetoothThread;
-    private boolean IsBtThreadRunning;
     private ChangeListener listener;
 
     // constructors
@@ -45,7 +51,10 @@ public class Bluetooth {
     }
 
     // methods
-    public void findDevice() throws BluetoothException{
+    private void findDevice() throws BluetoothException{
+        /*
+        This methods checks if a bluetooth module is available. If so it searches the external sensor in paired devices.
+         */
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if(mBluetoothAdapter == null)
         {
@@ -79,33 +88,9 @@ public class Bluetooth {
         }
     }
 
-    public void connectDevice() throws BluetoothException{
-            try {
-                UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"); //Standard SerialPortService ID
-                mmSocket = mmDevice.createRfcommSocketToServiceRecord(uuid);
-                mmSocket.connect();
-                mmOutputStream = mmSocket.getOutputStream();
-                mmInputStream = mmSocket.getInputStream();
-            } catch (IOException e){
-                throw new BluetoothException("Error: can't open bluetooth connection");
-            }
-
-            try {
-                readData();
-            } catch (Exception e){
-                throw new BluetoothException("Error: can't read bluetooth data");
-            }
-
-            // "Serial bluetooth communication opened";
-    }
-
     private void readData() {
-
         /*
-        Thread explanation:
-        multiple thread object can run parallel
-        Runnables are packages of work, which can be passed as an argument
-        Handler is an object to communicate between threads
+        This method starts a thread receiving the serial data from the external sensor. These values were passed back through a Handler.
          */
 
         final Handler mainHandler = new Handler();
@@ -142,7 +127,7 @@ public class Bluetooth {
                                     {
                                         public void run()
                                         {
-                                            setRxData(data);
+                                            rxData = data;
                                         }
                                     });
                                 }
@@ -157,25 +142,6 @@ public class Bluetooth {
                     {
                         stopBluetoothThread = true;
                     }
-                    finally {
-                        if(!stopBluetoothThread){
-                            mainHandler.post(new Runnable()
-                            {
-                                public void run()
-                                {
-                                    setIsBtThreadRunning(true);                                }
-                            });
-                        }
-                        else {
-                            mainHandler.post(new Runnable()
-                            {
-                                public void run()
-                                {
-                                    setIsBtThreadRunning(false);
-                                }
-                            });
-                        }
-                    }
                 }
             }
         });
@@ -183,14 +149,55 @@ public class Bluetooth {
         BluetoothThread.start();
     }
 
-    public void sendData() throws IOException {
-        String msg = "message";
-        msg += "\n";
-        mmOutputStream.write(msg.getBytes());
-        // "Data is sent to bluetooth device"
+    private void establishConnection() throws IOException{
+        /*
+        this methods starts the connection to the external sensor.
+         */
+        UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"); //Standard SerialPortService ID
+        mmSocket = mmDevice.createRfcommSocketToServiceRecord(uuid);
+        mmSocket.connect();
+        mmOutputStream = mmSocket.getOutputStream();
+        mmInputStream = mmSocket.getInputStream();
     }
 
-    public void closeBT() throws BluetoothException {
+    public void openConnection() throws BluetoothException{
+        /*
+        One method to rule them all.
+         */
+
+        try{
+            findDevice();
+        } catch (BluetoothException e){
+            throw e;
+        }
+
+        try {
+            establishConnection();
+        } catch (IOException e){
+            throw new BluetoothException("Error: can't open bluetooth connection");
+        }
+
+        try {
+            readData();
+        } catch (Exception e){
+            throw new BluetoothException("Error: can't read bluetooth data");
+        }
+    }
+
+    public void sendData(String msg) throws IOException {
+        /*
+        This method can send serial data to the external sensor.
+         */
+
+        msg += "\n";
+        mmOutputStream.write(msg.getBytes());
+    }
+
+    public void closeConnection() throws BluetoothException {
+        /*
+        This method closes the connection to the external sensor.
+         */
+
         try {
             stopBluetoothThread = true;
             mmOutputStream.close();
@@ -201,15 +208,8 @@ public class Bluetooth {
         }
     }
 
-    // methods for rxData calling listener
-    public String getRxData() {
-        return rxData;
-    }
 
-    private void setRxData(String data) {
-        this.rxData = data;
-        if (listener != null) listener.onChange();
-    }
+    // methods for rxData calling listener
 
     public ChangeListener getListener() {
         return listener;
@@ -223,13 +223,6 @@ public class Bluetooth {
         void onChange();
     }
 
-    public boolean getIsBtThreadRunning(){
-        return IsBtThreadRunning;
-    }
-
-    private void setIsBtThreadRunning(boolean data){
-        IsBtThreadRunning = data;
-    }
 }
 
 
