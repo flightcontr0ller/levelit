@@ -16,12 +16,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.Switch;
 
 public class SettingsActivity extends AppCompatActivity {
 
     // fields
-    private Bluetooth bluetooth;
+    protected SensorDataManagement SDM;
     private Button bt_nav_main;
     private Switch sw_extsensor;
 
@@ -30,6 +31,9 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
+        // Assign backend
+        SDM = (SensorDataManagement)getApplication();
 
         bt_nav_main = findViewById(R.id.bt_nav_main);
         bt_nav_main.setOnClickListener(new View.OnClickListener() {
@@ -40,15 +44,19 @@ public class SettingsActivity extends AppCompatActivity {
         });
 
         sw_extsensor = findViewById(R.id.sw_extsensor);
-
-        sw_extsensor.setChecked(getIntent().getBooleanExtra("use_external_sensor",false));
+        sw_extsensor.setChecked(SDM.useExternalSensor);
+        sw_extsensor.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                SDM.useExternalSensor = sw_extsensor.isChecked();
+            }
+        });
 
 
     }
 
     private void open_main_activity(){
         Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("use_external_sensor", sw_extsensor.isChecked());
         startActivity(intent);
     }
 }

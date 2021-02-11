@@ -19,14 +19,14 @@ This Class is the backend of this app. Bluetooth data and local sensor readings 
 
     // fields
     private Accelerometer accelerometer;
-    private Float local_Angle;
-
     private Bluetooth bluetooth;
     private DataProcessing dataProcessing;
-    private Float external_Angle;
 
-    public Float Angle;
-    public boolean use_external_sensor;
+
+    private Float Angle;
+    private ChangeListener listener;
+
+    public boolean useExternalSensor;
 
     // methods
     @Override
@@ -36,14 +36,12 @@ This Class is the backend of this app. Bluetooth data and local sensor readings 
         bluetooth = new Bluetooth();
         dataProcessing = new DataProcessing();
 
-        use_external_sensor = true;
-
         accelerometer.setListener(new Accelerometer.Listener() {
             @Override
             public void onTranslation(float tx, float ty, float tz) {
-                if(!use_external_sensor){
+                if(!useExternalSensor){
                     try{
-                        local_Angle = dataProcessing.getAngle(tx, ty);
+                        Angle = dataProcessing.getAngle(tx, ty);
                     } catch (Exception e){}
                 }
             }
@@ -52,9 +50,9 @@ This Class is the backend of this app. Bluetooth data and local sensor readings 
         bluetooth.setListener(new Bluetooth.ChangeListener() {
             @Override
             public void onChange() {
-                if(use_external_sensor){
+                if(useExternalSensor){
                     try{
-                        external_Angle = dataProcessing.getAngle(bluetooth.rxData);
+                        Angle = dataProcessing.getAngle(bluetooth.rxData);
                     } catch (DataProcessingException e){
                     }
                 }
@@ -63,13 +61,20 @@ This Class is the backend of this app. Bluetooth data and local sensor readings 
 
     }
 
-    public String getAngle(){
-        if(use_external_sensor){
-            return Float.toString(external_Angle);
-        }
-        else{
-            return Float.toString(local_Angle);
-        }
+    public Float getAngle(){
+         return Angle;
+    }
+
+    public ChangeListener getListener() {
+        return listener;
+    }
+
+    public void setListener(ChangeListener listener) {
+        this.listener = listener;
+    }
+
+    public interface ChangeListener {
+        void onChange();
     }
 
     public void stop_sensor(){
@@ -77,9 +82,11 @@ This Class is the backend of this app. Bluetooth data and local sensor readings 
     }
 
     public void start_sensor(){
-        if(use_external_sensor){
+        if(useExternalSensor){
             try {
-                bluetooth.openConnection();
+                if(!bluetooth.isConnected()){
+                    bluetooth.openConnection();
+                }
             } catch (BluetoothException e) {
                 e.printStackTrace();
             }

@@ -48,6 +48,7 @@ public class Bluetooth {
     // constructors
     public Bluetooth(){
         rxData = "";
+        stopBluetoothThread = true;
     }
 
     // methods
@@ -208,6 +209,15 @@ public class Bluetooth {
         }
     }
 
+    public boolean isConnected(){
+        /*
+        This method makes it possible to check whether the bluetooth thread is running or not
+         */
+        if(stopBluetoothThread){
+            return false;
+        }
+        return true;
+    }
 
     // methods for rxData calling listener
 
