@@ -86,13 +86,13 @@ This class checks the values from the external sensor.
         return BO_MOD_Alignment.NOTDEFIEND;
     }
 
-    private Float calcAngle(BO_MOD_Alignment currentBOMODAlignment) throws BO_MOD_DataProcessingException {
+    private Float calcAngle(BO_MOD_Alignment Alignment) throws BO_MOD_DataProcessingException {
     /*
     This method calculate the Angle depending on the alignment of the local device.
      */
 
-        if(currentBOMODAlignment == BO_MOD_Alignment.NOTDEFIEND){
-            throw new BO_MOD_DataProcessingException("Error: can't get current alignment");
+        if(Alignment == BO_MOD_Alignment.NOTDEFIEND){
+            throw new BO_MOD_DataProcessingException("can't get current alignment");
         }
         else{
             /* insert calculation here
@@ -101,10 +101,10 @@ This class checks the values from the external sensor.
                 throw new DataProcessingException("Error: values of local accelerometer are faulty");
             }
              */
-            if (currentBOMODAlignment == BO_MOD_Alignment.LEFTWARD){
+            if (Alignment == BO_MOD_Alignment.LEFTWARD){
                 return Float.valueOf(30);
             }
-            else if (currentBOMODAlignment == BO_MOD_Alignment.RIGHTWARD){
+            else if (Alignment == BO_MOD_Alignment.RIGHTWARD){
                 return Float.valueOf(-20);
             }
             else {
