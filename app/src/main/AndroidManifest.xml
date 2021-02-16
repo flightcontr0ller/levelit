@@ -16,9 +16,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Levelit"
-        android:name=".SensorDataManagement">
-        <activity android:name=".SettingsActivity"></activity>
-        <activity android:name=".MainActivity">
+        android:name=".BO_APP_SensorDataManagement">
+        <activity android:name=".GUI_SettingsActivity"></activity>
+        <activity android:name=".GUI_MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

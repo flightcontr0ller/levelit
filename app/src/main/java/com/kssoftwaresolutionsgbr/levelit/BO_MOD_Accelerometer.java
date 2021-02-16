@@ -16,7 +16,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
-public class Accelerometer {
+public class BO_MOD_Accelerometer {
 
     // interfaces as observer
     public interface AccelerometerListener {
@@ -31,7 +31,7 @@ public class Accelerometer {
     private AccelerometerListener accelerometerListener;
 
     // constructors
-    Accelerometer(Context context){
+    BO_MOD_Accelerometer(Context context){
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         sensorEventListener = new SensorEventListener() {

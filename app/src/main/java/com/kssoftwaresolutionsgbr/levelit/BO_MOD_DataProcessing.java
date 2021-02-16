@@ -10,18 +10,18 @@
 
 package com.kssoftwaresolutionsgbr.levelit;
 
-public class DataProcessing {
+public class BO_MOD_DataProcessing {
 /*
 This class checks the values from the external sensor.
  */
 
     // constructors
-    public DataProcessing(){
+    public BO_MOD_DataProcessing(){
 
     }
 
     // methods
-    public Float getAngle(String rxData) throws DataProcessingException {
+    public Float getAngle(String rxData) throws BO_MOD_DataProcessingException {
     /*
     This method checks the values from the external sensor.
      */
@@ -32,67 +32,67 @@ This class checks the values from the external sensor.
                 return angle;
             }
             else {
-                throw new DataProcessingException("values from external sensor are faulty");
+                throw new BO_MOD_DataProcessingException("values from external sensor are faulty");
             }
         } catch (Exception e){
-            throw new DataProcessingException("values from external sensor are faulty");
+            throw new BO_MOD_DataProcessingException("values from external sensor are faulty");
         }
 
     }
 
-    public Float getAngle(float mx, float my) throws DataProcessingException {
+    public Float getAngle(float mx, float my) throws BO_MOD_DataProcessingException {
     /*
     This method checks the values from the local sensor.
      */
 
         try{
             return calcAngle(getAlignment(mx, my));
-        } catch (DataProcessingException e){
+        } catch (BO_MOD_DataProcessingException e){
             throw e;
         }
     }
 
-    private Alignment getAlignment(float accX, float accY) {
+    private BO_MOD_Alignment getAlignment(float accX, float accY) {
         /*
         This method calculate the alignment of the local device.
          */
 
         if (accX >= 0 && accY >= 0) {
             if (accY > accX) {
-                return Alignment.UPWARD;
+                return BO_MOD_Alignment.UPWARD;
             } else if (accY < accX) {
-                return Alignment.LEFTWARD;
+                return BO_MOD_Alignment.LEFTWARD;
             }
         } else if (accX >= 0 && accY < 0) {
             if (accX > Math.abs(accY)) {
-                return Alignment.LEFTWARD;
+                return BO_MOD_Alignment.LEFTWARD;
             } else if (accX < Math.abs(accY)) {
-                return Alignment.DOWNWARD;
+                return BO_MOD_Alignment.DOWNWARD;
             }
         } else if (accX < 0 && accY < 0) {
             if (accX > accY) {
-                return Alignment.DOWNWARD;
+                return BO_MOD_Alignment.DOWNWARD;
             } else if (accX < accY) {
-                return Alignment.RIGHTWARD;
+                return BO_MOD_Alignment.RIGHTWARD;
             }
         } else if (accX < 0 && accY >= 0) {
             if (Math.abs(accX) > accY) {
-                return Alignment.RIGHTWARD;
+                return BO_MOD_Alignment.RIGHTWARD;
             } else if (Math.abs(accX) < accY) {
-                return Alignment.UPWARD;
+                return BO_MOD_Alignment.UPWARD;
             }
         }
 
-        return Alignment.NOTDEFIEND;
+        return BO_MOD_Alignment.NOTDEFIEND;
     }
 
-    private Float calcAngle(Alignment currentAlignment) throws DataProcessingException{
+    private Float calcAngle(BO_MOD_Alignment currentBOMODAlignment) throws BO_MOD_DataProcessingException {
     /*
     This method calculate the Angle depending on the alignment of the local device.
      */
 
-        if(currentAlignment == Alignment.NOTDEFIEND){
-            throw new DataProcessingException("Error: can't get current alignment");
+        if(currentBOMODAlignment == BO_MOD_Alignment.NOTDEFIEND){
+            throw new BO_MOD_DataProcessingException("Error: can't get current alignment");
         }
         else{
             /* insert calculation here
@@ -101,10 +101,10 @@ This class checks the values from the external sensor.
                 throw new DataProcessingException("Error: values of local accelerometer are faulty");
             }
              */
-            if (currentAlignment == Alignment.LEFTWARD){
+            if (currentBOMODAlignment == BO_MOD_Alignment.LEFTWARD){
                 return Float.valueOf(30);
             }
-            else if (currentAlignment == Alignment.RIGHTWARD){
+            else if (currentBOMODAlignment == BO_MOD_Alignment.RIGHTWARD){
                 return Float.valueOf(-20);
             }
             else {

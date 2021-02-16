@@ -17,12 +17,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+public class GUI_MainActivity extends AppCompatActivity {
 
     // fields
     private Button bt_nav_settings;
     private TextView tv_angle;
-    protected SensorDataManagement SDM;
+    protected BO_APP_SensorDataManagement SDM;
 
     // methods
     @Override
@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Assign backend
-        SDM = (SensorDataManagement)getApplication();
+        SDM = (BO_APP_SensorDataManagement)getApplication();
 
         // create button and textView
         tv_angle = findViewById(R.id.tv_angle);
@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        SDM.setAngleListener(new SensorDataManagement.AngleListener() {
+        SDM.setAngleListener(new BO_APP_SensorDataManagement.AngleListener() {
             @Override
             public void onChange(Float Angle) {
                 tv_angle.setText(Float.toString(Angle));
@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void open_settings_activity(){
-        Intent intent = new Intent(this, SettingsActivity.class);
+        Intent intent = new Intent(this, GUI_SettingsActivity.class);
         startActivity(intent);
     }
 

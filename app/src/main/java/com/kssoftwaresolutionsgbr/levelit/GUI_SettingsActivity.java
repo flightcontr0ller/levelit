@@ -19,10 +19,10 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 
-public class SettingsActivity extends AppCompatActivity {
+public class GUI_SettingsActivity extends AppCompatActivity {
 
     // fields
-    protected SensorDataManagement SDM;
+    protected BO_APP_SensorDataManagement SDM;
     private Button bt_nav_main;
     private Switch sw_extsensor;
 
@@ -33,7 +33,7 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
 
         // Assign backend
-        SDM = (SensorDataManagement)getApplication();
+        SDM = (BO_APP_SensorDataManagement)getApplication();
 
         bt_nav_main = findViewById(R.id.bt_nav_main);
         bt_nav_main.setOnClickListener(new View.OnClickListener() {
@@ -56,7 +56,7 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void open_main_activity(){
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, GUI_MainActivity.class);
         startActivity(intent);
     }
 }

@@ -12,7 +12,7 @@ package com.kssoftwaresolutionsgbr.levelit;
 
 import android.app.Application;
 
-public class SensorDataManagement extends Application {
+public class BO_APP_SensorDataManagement extends Application {
 /*
 This Class is the backend of this app. Bluetooth data and local sensor readings get controlled from here.
  */
@@ -22,9 +22,9 @@ This Class is the backend of this app. Bluetooth data and local sensor readings 
     }
 
     // fields
-    private Accelerometer accelerometer;
-    private Bluetooth bluetooth;
-    private DataProcessing dataProcessing;
+    private BO_MOD_Accelerometer Accelerometer;
+    private BO_MOD_Bluetooth Bluetooth;
+    private BO_MOD_DataProcessing DataProcessing;
 
     private Float currentAngle = Float.valueOf(0);
     private AngleListener listener;
@@ -35,37 +35,37 @@ This Class is the backend of this app. Bluetooth data and local sensor readings 
     @Override
     public void onCreate() {
         super.onCreate();
-        accelerometer = new Accelerometer(this);
-        bluetooth = new Bluetooth();
-        dataProcessing = new DataProcessing();
+        Accelerometer = new BO_MOD_Accelerometer(this);
+        Bluetooth = new BO_MOD_Bluetooth();
+        DataProcessing = new BO_MOD_DataProcessing();
 
         this.listener = null;
 
-        accelerometer.setAccelerometerListener(new Accelerometer.AccelerometerListener() {
+        Accelerometer.setAccelerometerListener(new BO_MOD_Accelerometer.AccelerometerListener() {
             @Override
             public void onTranslation(float tx, float ty, float tz) {
                 if(!useExternalSensor){
                     try{
-                        currentAngle = dataProcessing.getAngle(tx, ty);
+                        currentAngle = DataProcessing.getAngle(tx, ty);
                         if (listener != null){
                             listener.onChange(currentAngle);
                         }
-                    } catch (DataProcessingException e){}
+                    } catch (BO_MOD_DataProcessingException e){}
                 }
 
             }
         });
 
-        bluetooth.setBluetoothListener(new Bluetooth.BluetoothListener() {
+        Bluetooth.setBluetoothListener(new BO_MOD_Bluetooth.BluetoothListener() {
             @Override
             public void onChange(String receivedData) {
                 if(useExternalSensor){
                     try{
-                        currentAngle = dataProcessing.getAngle(receivedData);
+                        currentAngle = DataProcessing.getAngle(receivedData);
                         if (listener != null){
                             listener.onChange(currentAngle);
                         }
-                    } catch (DataProcessingException e){}
+                    } catch (BO_MOD_DataProcessingException e){}
                 }
             }
         });
@@ -73,21 +73,21 @@ This Class is the backend of this app. Bluetooth data and local sensor readings 
     }
 
     public void stop_sensor(){
-        accelerometer.unregister();
+        Accelerometer.unregister();
     }
 
     public void start_sensor(){
         if(useExternalSensor){
             try {
-                if(!bluetooth.isConnected()){
-                    bluetooth.openConnection();
+                if(!Bluetooth.isConnected()){
+                    Bluetooth.openConnection();
                 }
-            } catch (BluetoothException e) {
+            } catch (BO_MOD_BluetoothException e) {
                 e.printStackTrace();
             }
         }
         else{
-            accelerometer.register();
+            Accelerometer.register();
         }
     }
 

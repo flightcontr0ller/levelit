@@ -2,26 +2,26 @@
  ************************************************
  * project:      levelit
  * package name: com.kssoftwaresolutionsgbr.levelit
- * class:        DataProcessingException
+ * class:        BluetoothException
  * dev:          Malte Schoenert
- * created on:   2021-02-11
+ * created on:   2021-02-10
  ************************************************
  */
 
 package com.kssoftwaresolutionsgbr.levelit;
 
-public class DataProcessingException extends Exception {
+public class BO_MOD_BluetoothException extends Exception {
 /*
-Exception for DataProcessing errors.
+Exception for bluetooth errors.
  */
 
     // constructors
-    public DataProcessingException(){
-        super("undefined DataProcessing error");
+    public BO_MOD_BluetoothException(){
+        super("undefined bluetooth error");
     }
 
     //methods
-    public DataProcessingException(String ErrorMessage) {
+    public BO_MOD_BluetoothException(String ErrorMessage) {
         super(ErrorMessage);
     }
 }

@@ -20,7 +20,7 @@ import java.io.OutputStream;
 import java.util.Set;
 import java.util.UUID;
 
-public class Bluetooth {
+public class BO_MOD_Bluetooth {
     /*
     This class includes all methods to establish a bluetooth connection to the external sensor and sending as well as receiving data.
     The bluetooth SSID of the external sensor is set in the variable BluetoothDevice.
@@ -51,7 +51,7 @@ public class Bluetooth {
     private volatile boolean stopBluetoothThread;
 
     // constructors
-    public Bluetooth(){
+    public BO_MOD_Bluetooth(){
         rxData = "";
         stopBluetoothThread = true;
         this.listener = null;
@@ -59,19 +59,19 @@ public class Bluetooth {
 
 
     // methods
-    private void findDevice() throws BluetoothException{
+    private void findDevice() throws BO_MOD_BluetoothException {
         /*
         This methods checks if a bluetooth module is available. If so it searches the external sensor in paired devices.
          */
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if(mBluetoothAdapter == null)
         {
-            throw new BluetoothException("Warning: No bluetooth adapter available");
+            throw new BO_MOD_BluetoothException("Warning: No bluetooth adapter available");
         }
 
         if(!mBluetoothAdapter.isEnabled())
         {
-            throw new BluetoothException("Warning: Bluetooth is disabled");
+            throw new BO_MOD_BluetoothException("Warning: Bluetooth is disabled");
         }
 
         Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
@@ -88,11 +88,11 @@ public class Bluetooth {
                 }
             }
             if(!device_found){
-                throw new BluetoothException("Warning: device " + BluetoothDevice + " is not paired");
+                throw new BO_MOD_BluetoothException("Warning: device " + BluetoothDevice + " is not paired");
             }
         }
         else{
-            throw new BluetoothException("Warning: No paired devices found");
+            throw new BO_MOD_BluetoothException("Warning: No paired devices found");
         }
     }
 
@@ -168,27 +168,27 @@ public class Bluetooth {
         mmInputStream = mmSocket.getInputStream();
     }
 
-    public void openConnection() throws BluetoothException{
+    public void openConnection() throws BO_MOD_BluetoothException {
         /*
         One method to rule them all.
          */
 
         try{
             findDevice();
-        } catch (BluetoothException e){
+        } catch (BO_MOD_BluetoothException e){
             throw e;
         }
 
         try {
             establishConnection();
         } catch (IOException e){
-            throw new BluetoothException("Error: can't open bluetooth connection");
+            throw new BO_MOD_BluetoothException("Error: can't open bluetooth connection");
         }
 
         try {
             readData();
         } catch (Exception e){
-            throw new BluetoothException("Error: can't read bluetooth data");
+            throw new BO_MOD_BluetoothException("Error: can't read bluetooth data");
         }
     }
 
@@ -201,7 +201,7 @@ public class Bluetooth {
         mmOutputStream.write(msg.getBytes());
     }
 
-    public void closeConnection() throws BluetoothException {
+    public void closeConnection() throws BO_MOD_BluetoothException {
         /*
         This method closes the connection to the external sensor.
          */
@@ -212,7 +212,7 @@ public class Bluetooth {
             mmInputStream.close();
             mmSocket.close();
         } catch (IOException e){
-            throw new BluetoothException("Error: can't close bluetooth connection");
+            throw new BO_MOD_BluetoothException("Error: can't close bluetooth connection");
         }
     }
 
