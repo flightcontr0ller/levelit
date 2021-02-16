@@ -19,7 +19,7 @@ import android.hardware.SensorManager;
 public class Accelerometer {
 
     // interfaces as observer
-    public interface Listener{
+    public interface AccelerometerListener {
         void onTranslation(float tx, float ty, float tz);
     }
 
@@ -28,7 +28,7 @@ public class Accelerometer {
     private Sensor sensor;
     private SensorEventListener sensorEventListener;
 
-    private Listener listener;
+    private AccelerometerListener accelerometerListener;
 
     // constructors
     Accelerometer(Context context){
@@ -37,8 +37,8 @@ public class Accelerometer {
         sensorEventListener = new SensorEventListener() {
             @Override
             public void onSensorChanged(SensorEvent sensorEvent) {
-                if(listener != null){
-                    listener.onTranslation(sensorEvent.values[0], sensorEvent.values[1], sensorEvent.values[2]);
+                if(accelerometerListener != null){
+                    accelerometerListener.onTranslation(sensorEvent.values[0], sensorEvent.values[1], sensorEvent.values[2]);
                 }
             }
 
@@ -58,7 +58,7 @@ public class Accelerometer {
         sensorManager.unregisterListener(sensorEventListener);
     }
 
-    public void setListener(Listener l){
-        listener = l;
+    public void setAccelerometerListener(AccelerometerListener listener){
+        accelerometerListener = listener;
     }
 }

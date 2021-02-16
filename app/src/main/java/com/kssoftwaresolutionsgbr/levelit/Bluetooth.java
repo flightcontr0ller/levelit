@@ -28,6 +28,11 @@ public class Bluetooth {
     To stop receiving data run: closeConnection()
      */
 
+    // interfaces as observer
+    public interface BluetoothListener {
+        void onChange(String receivedData);
+    }
+
     // fields
     public static final String BluetoothDevice = "HC-06";
 
@@ -38,18 +43,20 @@ public class Bluetooth {
     InputStream mmInputStream;
     Thread BluetoothThread;
 
-    public String rxData;
+    private String rxData;
+    private BluetoothListener listener;
 
     private byte[] readBuffer;
     private int readBufferPosition;
     private volatile boolean stopBluetoothThread;
-    private ChangeListener listener;
 
     // constructors
     public Bluetooth(){
         rxData = "";
         stopBluetoothThread = true;
+        this.listener = null;
     }
+
 
     // methods
     private void findDevice() throws BluetoothException{
@@ -128,7 +135,7 @@ public class Bluetooth {
                                     {
                                         public void run()
                                         {
-                                            rxData = data;
+                                            setRxData(data);
                                         }
                                     });
                                 }
@@ -221,17 +228,21 @@ public class Bluetooth {
 
     // methods for rxData calling listener
 
-    public ChangeListener getListener() {
-        return listener;
-    }
-
-    public void setListener(ChangeListener listener) {
+    public void setBluetoothListener(BluetoothListener listener){
         this.listener = listener;
     }
 
-    public interface ChangeListener {
-        void onChange();
+    private void setRxData(String data){
+        rxData = data;
+        if (listener != null){
+            listener.onChange(rxData);
+        }
     }
+
+    private String getRxData(){
+        return rxData;
+    }
+
 
 }
 

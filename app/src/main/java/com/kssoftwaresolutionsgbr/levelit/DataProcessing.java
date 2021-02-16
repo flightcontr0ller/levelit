@@ -32,11 +32,12 @@ This class checks the values from the external sensor.
                 return angle;
             }
             else {
-                throw new DataProcessingException("Error: values from external sensor are faulty");
+                throw new DataProcessingException("values from external sensor are faulty");
             }
         } catch (Exception e){
-            throw e;
+            throw new DataProcessingException("values from external sensor are faulty");
         }
+
     }
 
     public Float getAngle(float mx, float my) throws DataProcessingException {
