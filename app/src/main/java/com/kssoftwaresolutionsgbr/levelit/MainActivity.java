@@ -17,12 +17,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.google.android.material.snackbar.Snackbar;
-
 public class MainActivity extends AppCompatActivity {
 
     // fields
-    private Button bt_update;
     private Button bt_nav_settings;
     private TextView tv_angle;
     protected SensorDataManagement SDM;
@@ -46,19 +43,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        bt_update = findViewById(R.id.bt_update);
-        bt_update.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                tv_angle.setText(Float.toString(SDM.getAngle()));
-            }
-        });
 
-
-        SDM.setListener(new SensorDataManagement.ChangeListener() {
+        SDM.setAngleListener(new SensorDataManagement.AngleListener() {
             @Override
-            public void onChange() {
-                tv_angle.setText(Float.toString(SDM.getAngle()));
+            public void onChange(Float Angle) {
+                tv_angle.setText(Float.toString(Angle));
             }
         });
 
