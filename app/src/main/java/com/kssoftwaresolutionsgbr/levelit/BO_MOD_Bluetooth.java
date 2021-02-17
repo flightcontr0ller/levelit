@@ -66,12 +66,12 @@ public class BO_MOD_Bluetooth {
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if(mBluetoothAdapter == null)
         {
-            throw new BO_MOD_BluetoothException("Warning: No bluetooth adapter available");
+            throw new BO_MOD_BluetoothException("No bluetooth adapter available");
         }
 
         if(!mBluetoothAdapter.isEnabled())
         {
-            throw new BO_MOD_BluetoothException("Warning: Bluetooth is disabled");
+            throw new BO_MOD_BluetoothException("Bluetooth is disabled");
         }
 
         Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
@@ -88,11 +88,11 @@ public class BO_MOD_Bluetooth {
                 }
             }
             if(!device_found){
-                throw new BO_MOD_BluetoothException("Warning: device " + BluetoothDevice + " is not paired");
+                throw new BO_MOD_BluetoothException("device " + BluetoothDevice + " is not paired");
             }
         }
         else{
-            throw new BO_MOD_BluetoothException("Warning: No paired devices found");
+            throw new BO_MOD_BluetoothException("No paired devices found");
         }
     }
 
@@ -182,13 +182,13 @@ public class BO_MOD_Bluetooth {
         try {
             establishConnection();
         } catch (IOException e){
-            throw new BO_MOD_BluetoothException("Error: can't open bluetooth connection");
+            throw new BO_MOD_BluetoothException("can't open bluetooth connection");
         }
 
         try {
             readData();
         } catch (Exception e){
-            throw new BO_MOD_BluetoothException("Error: can't read bluetooth data");
+            throw new BO_MOD_BluetoothException("can't read bluetooth data");
         }
     }
 
@@ -212,7 +212,7 @@ public class BO_MOD_Bluetooth {
             mmInputStream.close();
             mmSocket.close();
         } catch (IOException e){
-            throw new BO_MOD_BluetoothException("Error: can't close bluetooth connection");
+            throw new BO_MOD_BluetoothException("can't close bluetooth connection");
         }
     }
 

@@ -11,6 +11,7 @@
 package com.kssoftwaresolutionsgbr.levelit;
 
 import android.app.Application;
+import android.util.Log;
 
 public class BO_APP_SensorDataManagement extends Application {
 /*
@@ -50,7 +51,9 @@ This Class is the backend of this app. Bluetooth data and local sensor readings 
                         if (listener != null){
                             listener.onChange(currentAngle);
                         }
-                    } catch (BO_MOD_DataProcessingException e){}
+                    } catch (BO_MOD_DataProcessingException e){
+                        Log.e("DataProcessing", e.getMessage());
+                    }
                 }
 
             }
@@ -65,7 +68,9 @@ This Class is the backend of this app. Bluetooth data and local sensor readings 
                         if (listener != null){
                             listener.onChange(currentAngle);
                         }
-                    } catch (BO_MOD_DataProcessingException e){}
+                    } catch (BO_MOD_DataProcessingException e){
+                        Log.e("DataProcessing", e.getMessage());
+                    }
                 }
             }
         });
@@ -83,7 +88,7 @@ This Class is the backend of this app. Bluetooth data and local sensor readings 
                     Bluetooth.openConnection();
                 }
             } catch (BO_MOD_BluetoothException e) {
-                e.printStackTrace();
+                Log.e("Bluetooth", e.getMessage());
             }
         }
         else{
