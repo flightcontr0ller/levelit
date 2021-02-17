@@ -109,6 +109,7 @@ This class checks the values from the external sensor.
             }
             else {
                 return Float.valueOf(42);
+                //
             }
         }
     }
