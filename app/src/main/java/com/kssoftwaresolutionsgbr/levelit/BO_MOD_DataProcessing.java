@@ -10,6 +10,8 @@
 
 package com.kssoftwaresolutionsgbr.levelit;
 
+import java.lang.Math;
+
 public class BO_MOD_DataProcessing {
 /*
 This class checks the values from the external sensor.
@@ -46,7 +48,7 @@ This class checks the values from the external sensor.
      */
 
         try{
-            return calcAngle(getAlignment(mx, my));
+            return calcAngle(getAlignment(mx, my), mx, my);
         } catch (BO_MOD_DataProcessingException e){
             throw e;
         }
@@ -86,10 +88,11 @@ This class checks the values from the external sensor.
         return BO_MOD_Alignment.NOTDEFIEND;
     }
 
-    private Float calcAngle(BO_MOD_Alignment Alignment) throws BO_MOD_DataProcessingException {
+    private Float calcAngle(BO_MOD_Alignment Alignment, float mx, float my) throws BO_MOD_DataProcessingException {
     /*
     This method calculate the Angle depending on the alignment of the local device.
      */
+        Double d;
 
         if(Alignment == BO_MOD_Alignment.NOTDEFIEND){
             throw new BO_MOD_DataProcessingException("can't get current alignment");
@@ -101,6 +104,31 @@ This class checks the values from the external sensor.
                 throw new DataProcessingException("Error: values of local accelerometer are faulty");
             }
              */
+
+            //
+            if (Alignment == BO_MOD_Alignment.UPWARD){
+                d = Math.toDegrees(Math.asin(mx/9.81));
+                d = -d; //correction
+                return d.floatValue();
+            }
+            else if (Alignment == BO_MOD_Alignment.LEFTWARD){
+                d = Math.toDegrees(Math.asin(my/9.81));
+                return d.floatValue();
+            }
+            else if (Alignment == BO_MOD_Alignment.RIGHTWARD) {
+                d = Math.toDegrees(Math.asin(my/9.81));
+                d = -d; //correction
+                return d.floatValue();
+            }
+            else {
+                return Float.valueOf(42);
+
+
+
+
+
+
+            /*
             if (Alignment == BO_MOD_Alignment.LEFTWARD){
                 return Float.valueOf(30);
             }
@@ -109,7 +137,7 @@ This class checks the values from the external sensor.
             }
             else {
                 return Float.valueOf(42);
-                //
+                */
             }
         }
     }
