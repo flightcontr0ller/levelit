@@ -46,8 +46,8 @@ public class GUI_MainActivity extends AppCompatActivity {
 
         SDM.setAngleListener(new BO_APP_SensorDataManagement.AngleListener() {
             @Override
-            public void onChange(Float Angle) {
-                tv_angle.setText(Float.toString(Angle));
+            public void onChange(Integer Angle) {
+                tv_angle.setText(Integer.toString(Angle));
             }
         });
 

@@ -23,13 +23,13 @@ This class checks the values from the external sensor.
     }
 
     // methods
-    public Float getAngle(String rxData) throws BO_MOD_DataProcessingException {
+    public Integer getAngle(String rxData) throws BO_MOD_DataProcessingException {
     /*
     This method checks the values from the external sensor.
      */
 
         try {
-            Float angle = Float.parseFloat(rxData.trim());
+            Integer angle = Math.round(Float.valueOf((rxData.trim())));
             if (angle <= 180 && angle >= -180) {
                 return angle;
             } else {
@@ -38,10 +38,9 @@ This class checks the values from the external sensor.
         } catch (Exception e) {
             throw new BO_MOD_DataProcessingException("values from external sensor are faulty");
         }
-
     }
 
-    public float getAngle(float mx, float my) throws BO_MOD_DataProcessingException {
+    public Integer getAngle(float mx, float my) throws BO_MOD_DataProcessingException {
     /*
     This method checks the values from the local sensor.
      */
@@ -87,7 +86,7 @@ This class checks the values from the external sensor.
         return BO_MOD_Alignment.NOTDEFIEND;
     }
 
-    private float calcAngle(BO_MOD_Alignment Alignment, float mx, float my) throws BO_MOD_DataProcessingException {
+    private Integer calcAngle(BO_MOD_Alignment Alignment, float mx, float my) throws BO_MOD_DataProcessingException {
     /*
     This method calculate the Angle depending on the alignment of the local device.
      */
@@ -107,9 +106,9 @@ This class checks the values from the external sensor.
                 angle = -angle; //correction for left rotation
             }
             if (angle < 45 && angle > -45) {
-                return (float)Math.round(angle);
+                return Math.toIntExact(Math.round(angle));
             } else {
-                throw new BO_MOD_DataProcessingException("Error: values of local accelerometer are faulty");
+                throw new BO_MOD_DataProcessingException("values of local accelerometer are faulty");
             }
         }
 

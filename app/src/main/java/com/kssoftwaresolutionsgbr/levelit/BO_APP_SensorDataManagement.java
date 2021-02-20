@@ -18,7 +18,7 @@ This Class is the backend of this app. Bluetooth data and local sensor readings 
  */
 
     public interface AngleListener{
-        void onChange(Float Angle);
+        void onChange(Integer Angle);
     }
 
     // fields
@@ -26,7 +26,7 @@ This Class is the backend of this app. Bluetooth data and local sensor readings 
     private BO_MOD_Bluetooth Bluetooth;
     private BO_MOD_DataProcessing DataProcessing;
 
-    private Float currentAngle = Float.valueOf(0);
+    private Integer currentAngle = 0;
     private AngleListener listener;
 
     public boolean useExternalSensor;
