@@ -108,17 +108,17 @@ This class checks the values from the external sensor.
             //
             if (Alignment == BO_MOD_Alignment.UPWARD){
                 d = Math.toDegrees(Math.asin(mx/9.81));
-                d = -d; //correction
-                return d.floatValue();
+                d = -d; //correction for left rotation
+                return (float)Math.round(d); //
             }
             else if (Alignment == BO_MOD_Alignment.LEFTWARD){
                 d = Math.toDegrees(Math.asin(my/9.81));
-                return d.floatValue();
+                return (float)Math.round(d);
             }
             else if (Alignment == BO_MOD_Alignment.RIGHTWARD) {
                 d = Math.toDegrees(Math.asin(my/9.81));
-                d = -d; //correction
-                return d.floatValue();
+                d = -d; //correction for left rotation
+                return (float)Math.round(d);
             }
             else {
                 return Float.valueOf(42);
