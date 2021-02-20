@@ -18,7 +18,7 @@ This class checks the values from the external sensor.
  */
 
     // constructors
-    public BO_MOD_DataProcessing(){
+    public BO_MOD_DataProcessing() {
 
     }
 
@@ -28,28 +28,27 @@ This class checks the values from the external sensor.
     This method checks the values from the external sensor.
      */
 
-        try{
+        try {
             Float angle = Float.parseFloat(rxData.trim());
-            if (angle <= 180 && angle >= -180){
+            if (angle <= 180 && angle >= -180) {
                 return angle;
-            }
-            else {
+            } else {
                 throw new BO_MOD_DataProcessingException("values from external sensor are faulty");
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new BO_MOD_DataProcessingException("values from external sensor are faulty");
         }
 
     }
 
-    public Float getAngle(float mx, float my) throws BO_MOD_DataProcessingException {
+    public float getAngle(float mx, float my) throws BO_MOD_DataProcessingException {
     /*
     This method checks the values from the local sensor.
      */
 
-        try{
+        try {
             return calcAngle(getAlignment(mx, my), mx, my);
-        } catch (BO_MOD_DataProcessingException e){
+        } catch (BO_MOD_DataProcessingException e) {
             throw e;
         }
     }
@@ -88,58 +87,31 @@ This class checks the values from the external sensor.
         return BO_MOD_Alignment.NOTDEFIEND;
     }
 
-    private Float calcAngle(BO_MOD_Alignment Alignment, float mx, float my) throws BO_MOD_DataProcessingException {
+    private float calcAngle(BO_MOD_Alignment Alignment, float mx, float my) throws BO_MOD_DataProcessingException {
     /*
     This method calculate the Angle depending on the alignment of the local device.
      */
-        Double d;
+        Double angle = null;
+        final double gravity = 9.81; //standard acceleration on earth
 
-        if(Alignment == BO_MOD_Alignment.NOTDEFIEND){
+        if (Alignment == BO_MOD_Alignment.NOTDEFIEND) {
             throw new BO_MOD_DataProcessingException("can't get current alignment");
-        }
-        else{
-            /* insert calculation here
-            if(angle < 45 && angle > -45){}
-            else {
-                throw new DataProcessingException("Error: values of local accelerometer are faulty");
+        } else {
+            if (Alignment == BO_MOD_Alignment.UPWARD) {
+                angle = Math.toDegrees(Math.asin(mx / gravity));
+                angle = -angle; //correction for left rotation
+            } else if (Alignment == BO_MOD_Alignment.LEFTWARD | Alignment == BO_MOD_Alignment.DOWNWARD) {
+                angle = Math.toDegrees(Math.asin(my / gravity));
+            } else if (Alignment == BO_MOD_Alignment.RIGHTWARD | Alignment == BO_MOD_Alignment.DOWNWARD) {
+                angle = Math.toDegrees(Math.asin(my / gravity));
+                angle = -angle; //correction for left rotation
             }
-             */
-
-            //
-            if (Alignment == BO_MOD_Alignment.UPWARD){
-                d = Math.toDegrees(Math.asin(mx/9.81));
-                d = -d; //correction for left rotation
-                return (float)Math.round(d); //
-            }
-            else if (Alignment == BO_MOD_Alignment.LEFTWARD){
-                d = Math.toDegrees(Math.asin(my/9.81));
-                return (float)Math.round(d);
-            }
-            else if (Alignment == BO_MOD_Alignment.RIGHTWARD) {
-                d = Math.toDegrees(Math.asin(my/9.81));
-                d = -d; //correction for left rotation
-                return (float)Math.round(d);
-            }
-            else {
-                return Float.valueOf(42);
-
-
-
-
-
-
-            /*
-            if (Alignment == BO_MOD_Alignment.LEFTWARD){
-                return Float.valueOf(30);
-            }
-            else if (Alignment == BO_MOD_Alignment.RIGHTWARD){
-                return Float.valueOf(-20);
-            }
-            else {
-                return Float.valueOf(42);
-                */
+            if (angle < 45 && angle > -45) {
+                return (float)Math.round(angle);
+            } else {
+                throw new BO_MOD_DataProcessingException("Error: values of local accelerometer are faulty");
             }
         }
+
     }
-
 }
