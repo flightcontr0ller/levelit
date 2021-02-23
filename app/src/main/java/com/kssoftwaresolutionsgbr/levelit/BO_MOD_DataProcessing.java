@@ -29,7 +29,7 @@ This class checks the values from the external sensor.
      */
 
         try {
-            Integer angle = Math.round(Float.valueOf((rxData.trim())));
+            int angle = (int)Math.round(Float.valueOf((rxData.trim())));
             if (angle <= 180 && angle >= -180) {
                 return angle;
             } else {
