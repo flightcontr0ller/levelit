@@ -10,5 +10,6 @@
 
     <color name="DeepSkyBlue">#00bfff</color>
     <color name="LightSkyBlue">#4dd2ff</color>
+    <color name="WarningRed">#ff6633</color>
 
 </resources>

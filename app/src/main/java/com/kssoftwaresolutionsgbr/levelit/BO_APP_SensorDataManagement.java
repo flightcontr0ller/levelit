@@ -36,7 +36,10 @@ This Class is the backend of this app. Bluetooth data and local sensor readings 
     private boolean IsConnected;
     private IsConnectedListener isConnectedListener;
 
-    public boolean useExternalSensor;
+    public boolean useExternalSensor = false;
+
+    public boolean warningsActive = false;
+    public Integer warningAngle = 0;
 
     // methods
     @Override

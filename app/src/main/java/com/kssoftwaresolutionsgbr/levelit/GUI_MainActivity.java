@@ -9,11 +9,15 @@
  */
 package com.kssoftwaresolutionsgbr.levelit;
 
+import androidx.annotation.ColorInt;
+import androidx.annotation.ColorRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -25,6 +29,8 @@ public class GUI_MainActivity extends AppCompatActivity {
     private TextView tv_angle;
     private TextView tv_sensor;
     private TextView tv_connection;
+    private Vibrator vibrator;
+    private boolean warned = false;
     protected BO_APP_SensorDataManagement SDM;
 
     // methods
@@ -63,12 +69,13 @@ public class GUI_MainActivity extends AppCompatActivity {
             tv_connection.setText("not connected");
         }
 
+        vibrator = (Vibrator)getSystemService(VIBRATOR_SERVICE);
 
 
         SDM.setAngleListener(new BO_APP_SensorDataManagement.AngleListener() {
             @Override
             public void onChange(Integer Angle) {
-                tv_angle.setText(Integer.toString(Angle));
+                display_values(Angle);
             }
         });
 
@@ -83,8 +90,25 @@ public class GUI_MainActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
+
+    private void display_values(Integer angle){
+        tv_angle.setText(Integer.toString(angle));
+        tv_angle.setRotation(-angle);
+        int color = getResources().getColor(R.color.DeepSkyBlue);
+        if(SDM.warningsActive && Math.abs(angle) > SDM.warningAngle){
+            color = getResources().getColor(R.color.WarningRed);
+            if(!warned){
+                vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
+                warned = true;
+            }
+        }
+        else{
+            warned = false;
+        }
+        tv_angle.setBackgroundColor(color);
+    }
+
 
     private void open_settings_activity(){
         Intent intent = new Intent(this, GUI_SettingsActivity.class);

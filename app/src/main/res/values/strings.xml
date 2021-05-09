@@ -10,4 +10,5 @@
     <string name="tv_sensor">n.a.</string>
     <string name="tv_sensor_status">current sensor</string>
     <string name="tv_connection_status">status ext sensor</string>
+    <string name="warn_at_angle">warn at angle</string>
 </resources>

@@ -17,7 +17,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.Switch;
+import android.widget.Toast;
 
 public class GUI_SettingsActivity extends AppCompatActivity {
 
@@ -25,6 +27,10 @@ public class GUI_SettingsActivity extends AppCompatActivity {
     protected BO_APP_SensorDataManagement SDM;
     private Button bt_nav_main;
     private Switch sw_extsensor;
+    private Switch sw_warning;
+    private EditText et_warning_angle;
+
+    private Integer warning_angle;
 
     // methods
     @Override
@@ -53,10 +59,49 @@ public class GUI_SettingsActivity extends AppCompatActivity {
         });
 
 
+        et_warning_angle = findViewById(R.id.et_warning_angle);
+        et_warning_angle.setText(String.valueOf(SDM.warningAngle));
+        et_warning_angle.setEnabled(SDM.warningsActive);
+
+        sw_warning = findViewById(R.id.sw_warning);
+        sw_warning.setChecked(SDM.warningsActive);
+        sw_warning.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                SDM.warningsActive = sw_warning.isChecked();
+                et_warning_angle.setEnabled(sw_warning.isChecked());
+            }
+        });
+
+
+
+
     }
 
     private void open_main_activity(){
+    if (valid_input(Float.parseFloat(et_warning_angle.getText().toString()))){
+        SDM.warningAngle = warning_angle;
         Intent intent = new Intent(this, GUI_MainActivity.class);
         startActivity(intent);
+    }
+    else{
+        Toast.makeText(getApplicationContext(),  "invalid warning angle", Toast.LENGTH_SHORT).show();
+    }
+
+    }
+
+    private boolean valid_input(Float raw_input){
+        try {
+            warning_angle = (int)Math.round(Float.valueOf(raw_input));
+        } catch (Exception exception){
+            return false;
+        }
+        if(warning_angle > 45 || warning_angle <= 0){
+            return false;
+        }
+        else{
+            return true;
+        }
+
     }
 }
