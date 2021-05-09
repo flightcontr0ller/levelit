@@ -21,6 +21,9 @@ This Class is the backend of this app. Bluetooth data and local sensor readings 
     public interface AngleListener{
         void onChange(Integer Angle);
     }
+    public interface IsConnectedListener{
+        void onChange(boolean state);
+    }
 
     // fields
     private BO_MOD_Accelerometer Accelerometer;
@@ -28,7 +31,10 @@ This Class is the backend of this app. Bluetooth data and local sensor readings 
     private BO_MOD_DataProcessing DataProcessing;
 
     private Integer currentAngle = 0;
-    private AngleListener listener;
+    private AngleListener angleListener;
+
+    private boolean IsConnected;
+    private IsConnectedListener isConnectedListener;
 
     public boolean useExternalSensor;
 
@@ -40,7 +46,8 @@ This Class is the backend of this app. Bluetooth data and local sensor readings 
         Bluetooth = new BO_MOD_Bluetooth();
         DataProcessing = new BO_MOD_DataProcessing();
 
-        this.listener = null;
+        this.angleListener = null;
+        this.isConnectedListener = null;
 
         Accelerometer.setAccelerometerListener(new BO_MOD_Accelerometer.AccelerometerListener() {
             @Override
@@ -48,8 +55,8 @@ This Class is the backend of this app. Bluetooth data and local sensor readings 
                 if(!useExternalSensor){
                     try{
                         currentAngle = DataProcessing.getAngle(tx, ty);
-                        if (listener != null){
-                            listener.onChange(currentAngle);
+                        if (angleListener != null){
+                            angleListener.onChange(currentAngle);
                         }
                     } catch (BO_MOD_DataProcessingException e){
                         Log.e("DataProcessing", e.getMessage());
@@ -59,18 +66,28 @@ This Class is the backend of this app. Bluetooth data and local sensor readings 
             }
         });
 
-        Bluetooth.setBluetoothListener(new BO_MOD_Bluetooth.BluetoothListener() {
+        Bluetooth.setBluetoothDataListener(new BO_MOD_Bluetooth.BluetoothDataListener() {
             @Override
             public void onChange(String receivedData) {
                 if(useExternalSensor){
                     try{
                         currentAngle = DataProcessing.getAngle(receivedData);
-                        if (listener != null){
-                            listener.onChange(currentAngle);
+                        if (angleListener != null){
+                            angleListener.onChange(currentAngle);
                         }
                     } catch (BO_MOD_DataProcessingException e){
                         Log.e("DataProcessing", e.getMessage());
                     }
+                }
+            }
+        });
+
+        Bluetooth.setBluetoothIsConnectedListener(new BO_MOD_Bluetooth.BluetoothIsConnectedListener() {
+            @Override
+            public void onChange(boolean state) {
+                IsConnected = state;
+                if (isConnectedListener != null){
+                    isConnectedListener.onChange(IsConnected);
                 }
             }
         });
@@ -96,8 +113,16 @@ This Class is the backend of this app. Bluetooth data and local sensor readings 
         }
     }
 
+    public boolean IsBluetoothConnected(){
+        return IsConnected;
+    }
+
     public void setAngleListener(AngleListener listener) {
-        this.listener = listener;
+        this.angleListener = listener;
+    }
+
+    public void setIsConnectedListener(IsConnectedListener listener){
+        this.isConnectedListener = listener;
     }
 
 }

@@ -29,8 +29,11 @@ public class BO_MOD_Bluetooth {
      */
 
     // interfaces as observer
-    public interface BluetoothListener {
+    public interface BluetoothDataListener {
         void onChange(String receivedData);
+    }
+    public interface BluetoothIsConnectedListener {
+        void onChange(boolean isConnected);
     }
 
     // fields
@@ -44,7 +47,9 @@ public class BO_MOD_Bluetooth {
     Thread BluetoothThread;
 
     private String rxData;
-    private BluetoothListener listener;
+    private BluetoothDataListener DataListener;
+    private boolean isConnected;
+    private BluetoothIsConnectedListener IsConnectedListener;
 
     private byte[] readBuffer;
     private int readBufferPosition;
@@ -53,8 +58,9 @@ public class BO_MOD_Bluetooth {
     // constructors
     public BO_MOD_Bluetooth(){
         rxData = "";
-        stopBluetoothThread = true;
-        this.listener = null;
+        stopBluetoothThread = true; setIsConnected(false);
+        this.DataListener = null;
+        this.IsConnectedListener = null;
     }
 
 
@@ -104,7 +110,7 @@ public class BO_MOD_Bluetooth {
         final Handler mainHandler = new Handler();
         final byte delimiter = 10; //  ASCII code for a newline character
 
-        stopBluetoothThread = false;
+        stopBluetoothThread = false; setIsConnected(true);
         readBufferPosition = 0;
         readBuffer = new byte[1024];
 
@@ -148,7 +154,7 @@ public class BO_MOD_Bluetooth {
                     }
                     catch (IOException e)
                     {
-                        stopBluetoothThread = true;
+                        stopBluetoothThread = true; setIsConnected(false);
                     }
                 }
             }
@@ -172,7 +178,7 @@ public class BO_MOD_Bluetooth {
         /*
         One method to rule them all.
          */
-
+        setIsConnected(false);
         try{
             findDevice();
         } catch (BO_MOD_BluetoothException e){
@@ -207,7 +213,7 @@ public class BO_MOD_Bluetooth {
          */
 
         try {
-            stopBluetoothThread = true;
+            stopBluetoothThread = true; setIsConnected(false);
             mmOutputStream.close();
             mmInputStream.close();
             mmSocket.close();
@@ -228,19 +234,32 @@ public class BO_MOD_Bluetooth {
 
     // methods for rxData calling listener
 
-    public void setBluetoothListener(BluetoothListener listener){
-        this.listener = listener;
+    public void setBluetoothDataListener(BluetoothDataListener listener){
+        this.DataListener = listener;
     }
 
     private void setRxData(String data){
         rxData = data;
-        if (listener != null){
-            listener.onChange(rxData);
+        if (DataListener != null){
+            DataListener.onChange(rxData);
         }
     }
 
     private String getRxData(){
         return rxData;
+    }
+
+    // methods for IsConnectedListener
+
+    public void setBluetoothIsConnectedListener(BluetoothIsConnectedListener listener){
+        this.IsConnectedListener = listener;
+    }
+
+    private void setIsConnected(boolean state){
+        isConnected = state;
+        if (IsConnectedListener != null){
+            IsConnectedListener.onChange(isConnected);
+        }
     }
 
 

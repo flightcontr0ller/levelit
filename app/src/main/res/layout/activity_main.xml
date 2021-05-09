@@ -7,6 +7,10 @@
     android:layout_height="match_parent"
     tools:context=".GUI_MainActivity">
 
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
+
     <Button
         android:id="@+id/bt_nav_settings"
         android:layout_width="wrap_content"

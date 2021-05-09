@@ -10,6 +10,7 @@
 package com.kssoftwaresolutionsgbr.levelit;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,6 +23,8 @@ public class GUI_MainActivity extends AppCompatActivity {
     // fields
     private Button bt_nav_settings;
     private TextView tv_angle;
+    private TextView tv_sensor;
+    private TextView tv_connection;
     protected BO_APP_SensorDataManagement SDM;
 
     // methods
@@ -43,11 +46,41 @@ public class GUI_MainActivity extends AppCompatActivity {
             }
         });
 
+        // create TextViews in Toolbar
+        tv_sensor = findViewById(R.id.tv_sensor);
+        if (SDM.useExternalSensor){
+            tv_sensor.setText("external");
+        }
+        else{
+            tv_sensor.setText("local");
+        }
+
+        tv_connection = findViewById(R.id.tv_connection);
+        if(SDM.IsBluetoothConnected()){
+            tv_connection.setText("connected");
+        }
+        else{
+            tv_connection.setText("not connected");
+        }
+
+
 
         SDM.setAngleListener(new BO_APP_SensorDataManagement.AngleListener() {
             @Override
             public void onChange(Integer Angle) {
                 tv_angle.setText(Integer.toString(Angle));
+            }
+        });
+
+        SDM.setIsConnectedListener(new BO_APP_SensorDataManagement.IsConnectedListener() {
+            @Override
+            public void onChange(boolean BluetoothIsConnected) {
+                if(BluetoothIsConnected){
+                    tv_connection.setText("connected");
+                }
+                else{
+                    tv_connection.setText("not connected");
+                }
             }
         });
 
@@ -62,6 +95,7 @@ public class GUI_MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         SDM.start_sensor();
+
     }
 
     @Override
