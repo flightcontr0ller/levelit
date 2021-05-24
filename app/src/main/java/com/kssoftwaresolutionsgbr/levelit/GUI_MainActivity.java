@@ -2,7 +2,7 @@
  ************************************************
  * project:      levelit
  * package name: com.kssoftwaresolutionsgbr.levelit
- * class:        MainActivity
+ * class:        GUI_MainActivity
  * dev:          Malte Schoenert
  * created on:   2021-02-08
  ************************************************
@@ -24,6 +24,10 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class GUI_MainActivity extends AppCompatActivity {
+    /*
+    This activity displays the measured values and warnings. In case of a warning the device
+    vibrates additionally.
+     */
 
     // fields
     private Button bt_nav_settings;

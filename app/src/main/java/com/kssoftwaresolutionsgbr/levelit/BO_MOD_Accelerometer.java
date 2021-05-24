@@ -2,7 +2,7 @@
  ************************************************
  * project:      levelit
  * package name: com.kssoftwaresolutionsgbr.levelit
- * class:        Accelerometer
+ * class:        BO_MOD_Accelerometer
  * dev:          Malte Schoenert
  * created on:   2021-02-08
  ************************************************
@@ -17,6 +17,9 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
 public class BO_MOD_Accelerometer {
+/*
+This class enables local sensor reading of the accelerometer.
+ */
 
     // interfaces as observer
     public interface AccelerometerListener {

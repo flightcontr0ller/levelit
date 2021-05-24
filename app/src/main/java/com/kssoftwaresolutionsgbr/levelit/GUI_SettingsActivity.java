@@ -2,7 +2,7 @@
  ************************************************
  * project:      levelit
  * package name: com.kssoftwaresolutionsgbr.levelit
- * class:        SettingsActivity
+ * class:        GUI_SettingsActivity
  * dev:          Malte Schoenert
  * created on:   2021-02-09
  ************************************************
@@ -22,6 +22,10 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 public class GUI_SettingsActivity extends AppCompatActivity {
+/*
+This activity includes UI elements to set up the app behavior. It is possible to switch between
+sensors and set a warning at a special angle.
+ */
 
     // fields
     protected BO_APP_SensorDataManagement SDM;
@@ -81,46 +85,53 @@ public class GUI_SettingsActivity extends AppCompatActivity {
                 et_warning_angle.setEnabled(sw_warning.isChecked());
             }
         });
-
-
-
-
     }
 
     private void open_main_activity(){
+        if(valid_input()){
+            lock_ui();
+            start_main_activity();
+        }
+        else{
+            Toast.makeText(getApplicationContext(),  "invalid warning angle", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void lock_ui(){
+        bt_nav_main.setEnabled(false);
+        bt_nav_about.setEnabled(false);
+        sw_extsensor.setEnabled(false);
+        sw_warning.setEnabled(false);
+        et_warning_angle.setEnabled(false);
+    }
+
+    private void start_main_activity(){
+        Intent intent = new Intent(this, GUI_MainActivity.class);
+        startActivity(intent);
+    }
+
+    private boolean valid_input(){
         if(sw_warning.isChecked()){
-            if (valid_input(Float.parseFloat(et_warning_angle.getText().toString()))){
-                SDM.warningAngle = warning_angle;
-                Intent intent = new Intent(this, GUI_MainActivity.class);
-                startActivity(intent);
+            try {
+                warning_angle = Math.round(Float.valueOf(Float.parseFloat(et_warning_angle.getText().toString())));
+            } catch (Exception exception){
+                return false;
+            }
+            if(warning_angle > 45 || warning_angle <= 0){
+                return false;
             }
             else{
-                Toast.makeText(getApplicationContext(),  "invalid warning angle", Toast.LENGTH_SHORT).show();
+                SDM.warningAngle = warning_angle;
+                return true;
             }
         }
         else{
-            Intent intent = new Intent(this, GUI_MainActivity.class);
-            startActivity(intent);
+            return true;
         }
     }
 
     private void open_about_activity(){
         Intent intent = new Intent(this, GUI_About.class);
         startActivity(intent);
-    }
-
-    private boolean valid_input(Float raw_input){
-        try {
-            warning_angle = (int)Math.round(Float.valueOf(raw_input));
-        } catch (Exception exception){
-            return false;
-        }
-        if(warning_angle > 45 || warning_angle <= 0){
-            return false;
-        }
-        else{
-            return true;
-        }
-
     }
 }

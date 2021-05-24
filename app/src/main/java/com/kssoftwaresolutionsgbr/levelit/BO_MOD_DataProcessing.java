@@ -2,8 +2,8 @@
  ************************************************
  * project:      levelit
  * package name: com.kssoftwaresolutionsgbr.levelit
- * class:        DataProcessingExternal
- * dev:          Malte Schoenert
+ * class:        BO_MOD_DataProcessing
+ * dev:          Jack Kittelmann
  * created on:   2021-02-09
  ************************************************
  */
@@ -14,7 +14,7 @@ import java.lang.Math;
 
 public class BO_MOD_DataProcessing {
 /*
-This class checks the values from the external sensor.
+This class checks the values from the external and the local sensor. Potential errors get handled.
  */
 
     // constructors
@@ -32,7 +32,7 @@ This class checks the values from the external sensor.
      */
 
         try {
-            int angle = (int)Math.round(Float.valueOf((rxData.trim())));
+            int angle = Math.round(Float.valueOf(rxData.trim()));
             if (angle <= 180 && angle >= -180) {
                 return angle;
             } else {
@@ -115,7 +115,7 @@ This class checks the values from the external sensor.
                 angle = Math.toDegrees(Math.asin(my / gravity));
                 angle = -angle; //correction for left rotation
             }
-            if (angle < 45 && angle > -45) {
+            if (angle != null && angle < 45 && angle > -45) {
                 return Math.toIntExact(Math.round(angle));
             } else {
                 throw new BO_MOD_DataProcessingException("values of local accelerometer are faulty");

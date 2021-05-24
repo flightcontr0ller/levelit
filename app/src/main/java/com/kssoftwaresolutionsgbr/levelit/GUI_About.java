@@ -1,3 +1,12 @@
+/*
+ ************************************************
+ * project:      levelit
+ * package name: com.kssoftwaresolutionsgbr.levelit
+ * class:        GUI_About
+ * dev:          Jack Kittelmann
+ * created on:   2021-05-24
+ ************************************************
+ */
 package com.kssoftwaresolutionsgbr.levelit;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,6 +19,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class GUI_About extends AppCompatActivity {
+/*
+This activity displays information about the app.
+ */
 
     // fields
     private Button bt_nav_settings;
