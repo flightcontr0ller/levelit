@@ -2,7 +2,7 @@
  ************************************************
  * project:      levelit
  * package name: com.kssoftwaresolutionsgbr.levelit
- * class:        Bluetooth
+ * class:        BO_MOD_Bluetooth
  * dev:          Malte Schoenert
  * created on:   2021-02-08
  ************************************************

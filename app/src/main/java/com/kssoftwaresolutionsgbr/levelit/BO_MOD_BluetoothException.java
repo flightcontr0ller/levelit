@@ -2,7 +2,7 @@
  ************************************************
  * project:      levelit
  * package name: com.kssoftwaresolutionsgbr.levelit
- * class:        BluetoothException
+ * class:        BO_MOD_BluetoothException
  * dev:          Malte Schoenert
  * created on:   2021-02-10
  ************************************************

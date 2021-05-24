@@ -14,7 +14,7 @@
     <string name="tv_sensor_status">current sensor</string>
     <string name="tv_connection_status">status ext sensor</string>
     <string name="warn_at_angle">warn at angle</string>
-    <string name="info">This APP was developed as part of the exam in Embedded Systems I. The source code is available on GitHub.</string>
+    <string name="info">This app was developed as part of the exam in Embedded Systems I. The source code is available on GitHub.</string>
     <string name="info_2">Just click here!</string>
     <string name="developers_label">developers:</string>
     <string name="version_label">version:</string>

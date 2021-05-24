@@ -2,8 +2,8 @@
  ************************************************
  * project:      levelit
  * package name: com.kssoftwaresolutionsgbr.levelit
- * class:        DataProcessingException
- * dev:          Malte Schoenert
+ * class:        BO_MOD_DataProcessingException
+ * dev:          Jack Kittelmann
  * created on:   2021-02-11
  ************************************************
  */
