@@ -9,21 +9,24 @@
 
     <TextView
         android:id="@+id/tv_source_code"
-        android:layout_width="335dp"
-        android:layout_height="47dp"
+        android:layout_width="0dp"
+        android:layout_height="44dp"
         android:text="@string/info_2"
+        android:textAlignment="textStart"
+        android:textColor="@color/DeepSkyBlue"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/bt_nav_settings_2"
+        app:layout_constraintEnd_toStartOf="@+id/space_2"
         app:layout_constraintStart_toStartOf="@+id/tv_info"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_settings"
-        app:layout_constraintVertical_bias="0.877" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_about"
+        app:layout_constraintVertical_bias="0.9" />
 
     <TextView
         android:id="@+id/tv_version"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/no_data_available"
-        android:textSize="16dp"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@+id/tv_dev_2"
         app:layout_constraintTop_toBottomOf="@+id/tv_dev_2" />
 
@@ -32,7 +35,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/dev_2"
-        android:textSize="16dp"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@+id/tv_dev_1"
         app:layout_constraintTop_toBottomOf="@+id/tv_dev_1" />
 
@@ -41,7 +44,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/dev_1"
-        android:textSize="16dp"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/tv_dev_label2"
         app:layout_constraintTop_toTopOf="@+id/tv_dev_label2" />
@@ -51,16 +54,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/developers_label"
-        android:textSize="16dp"
+        android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/tv_info"
         app:layout_constraintEnd_toStartOf="@+id/bt_nav_settings_2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_settings"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_about"
         app:layout_constraintVertical_bias="0.518" />
 
     <include
-        android:id="@+id/toolbar_settings"
-        layout="@layout/toolbar_settings" />
+        android:id="@+id/toolbar_about"
+        layout="@layout/toolbar_about" />
 
     <Button
         android:id="@+id/bt_nav_settings_2"
@@ -74,20 +77,37 @@
 
     <TextView
         android:id="@+id/tv_info"
-        android:layout_width="334dp"
-        android:layout_height="44dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:text="@string/info"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/tv_source_code"
-        app:layout_constraintStart_toStartOf="@+id/tv_dev_label2" />
+        app:layout_constraintEnd_toStartOf="@+id/space_2"
+        app:layout_constraintStart_toEndOf="@+id/space_1" />
 
     <TextView
         android:id="@+id/tv_version_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/version_label"
-        android:textSize="16dp"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@+id/tv_dev_label2"
-        app:layout_constraintTop_toBottomOf="@+id/tv_dev_2" />
+        app:layout_constraintTop_toTopOf="@+id/tv_version" />
+
+    <Space
+        android:id="@+id/space_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        app:layout_constraintBottom_toTopOf="@+id/bt_nav_settings_2"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Space
+        android:id="@+id/space_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintBottom_toTopOf="@+id/bt_nav_settings_2"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
