@@ -19,8 +19,11 @@ This class checks the values from the external sensor.
 
     // constructors
     public BO_MOD_DataProcessing() {
-
+        isHorizontal = false;
     }
+
+    // fields
+    private Boolean isHorizontal;
 
     // methods
     public Integer getAngle(String rxData) throws BO_MOD_DataProcessingException {
@@ -59,30 +62,37 @@ This class checks the values from the external sensor.
 
         if (accX >= 0 && accY >= 0) {
             if (accY > accX) {
+                isHorizontal = false;
                 return BO_MOD_Alignment.UPWARD;
             } else if (accY < accX) {
+                isHorizontal = true;
                 return BO_MOD_Alignment.LEFTWARD;
             }
         } else if (accX >= 0 && accY < 0) {
             if (accX > Math.abs(accY)) {
+                isHorizontal = true;
                 return BO_MOD_Alignment.LEFTWARD;
             } else if (accX < Math.abs(accY)) {
+                isHorizontal = false;
                 return BO_MOD_Alignment.DOWNWARD;
             }
         } else if (accX < 0 && accY < 0) {
             if (accX > accY) {
+                isHorizontal = false;
                 return BO_MOD_Alignment.DOWNWARD;
             } else if (accX < accY) {
+                isHorizontal = true;
                 return BO_MOD_Alignment.RIGHTWARD;
             }
         } else if (accX < 0 && accY >= 0) {
             if (Math.abs(accX) > accY) {
+                isHorizontal = true;
                 return BO_MOD_Alignment.RIGHTWARD;
             } else if (Math.abs(accX) < accY) {
+                isHorizontal = false;
                 return BO_MOD_Alignment.UPWARD;
             }
         }
-
         return BO_MOD_Alignment.NOTDEFIEND;
     }
 
@@ -112,5 +122,9 @@ This class checks the values from the external sensor.
             }
         }
 
+    }
+
+    public Boolean getIsHorizontal(){
+        return isHorizontal;
     }
 }

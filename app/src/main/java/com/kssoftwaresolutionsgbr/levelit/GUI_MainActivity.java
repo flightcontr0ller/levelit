@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
@@ -79,6 +80,18 @@ public class GUI_MainActivity extends AppCompatActivity {
             }
         });
 
+        SDM.setDisplayIsHorizontalListener(new BO_APP_SensorDataManagement.DisplayIsHorizontalListener() {
+            @Override
+            public void onChange(Boolean DisplayIsHorizontal) {
+                if(DisplayIsHorizontal){
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+                }
+                else{
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
+                }
+            }
+        });
+
         SDM.setIsConnectedListener(new BO_APP_SensorDataManagement.IsConnectedListener() {
             @Override
             public void onChange(boolean BluetoothIsConnected) {
@@ -91,6 +104,7 @@ public class GUI_MainActivity extends AppCompatActivity {
             }
         });
     }
+
 
     private void display_values(Integer angle){
         tv_angle.setText(Integer.toString(angle));

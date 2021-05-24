@@ -32,6 +32,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <Button
+        android:id="@+id/bt_nav_about"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/about"
+        app:cornerRadius="20dip"
+        app:layout_constraintBottom_toTopOf="@+id/bt_nav_main"
+        app:layout_constraintEnd_toEndOf="@+id/bt_nav_main"
+        app:layout_constraintStart_toStartOf="@+id/bt_nav_main"
+        app:layout_constraintTop_toBottomOf="@+id/et_warning_angle" />
+
     <Switch
         android:id="@+id/sw_warning"
         android:layout_width="wrap_content"

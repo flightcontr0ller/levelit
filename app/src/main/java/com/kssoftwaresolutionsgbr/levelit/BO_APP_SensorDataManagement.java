@@ -21,6 +21,9 @@ This Class is the backend of this app. Bluetooth data and local sensor readings 
     public interface AngleListener{
         void onChange(Integer Angle);
     }
+    public interface DisplayIsHorizontalListener{
+        void onChange(Boolean DisplayIsHorizontal);
+    }
     public interface IsConnectedListener{
         void onChange(boolean state);
     }
@@ -32,6 +35,9 @@ This Class is the backend of this app. Bluetooth data and local sensor readings 
 
     private Integer currentAngle = 0;
     private AngleListener angleListener;
+
+    private Boolean DisplayIsHorizontal = false;
+    private DisplayIsHorizontalListener displayIsHorizontalListener;
 
     private boolean IsConnected;
     private IsConnectedListener isConnectedListener;
@@ -57,10 +63,13 @@ This Class is the backend of this app. Bluetooth data and local sensor readings 
             public void onTranslation(float tx, float ty, float tz) {
                 if(!useExternalSensor){
                     try{
+                        DisplayIsHorizontal = DataProcessing.getIsHorizontal();
                         currentAngle = DataProcessing.getAngle(tx, ty);
-                        if (angleListener != null){
+                        if (angleListener != null && displayIsHorizontalListener != null){
                             angleListener.onChange(currentAngle);
+                            displayIsHorizontalListener.onChange(DisplayIsHorizontal);
                         }
+
                     } catch (BO_MOD_DataProcessingException e){
                         Log.e("DataProcessing", e.getMessage());
                     }
@@ -76,7 +85,7 @@ This Class is the backend of this app. Bluetooth data and local sensor readings 
                     try{
                         currentAngle = DataProcessing.getAngle(receivedData);
                         if (angleListener != null){
-                            angleListener.onChange(currentAngle);
+                            angleListener.onChange(-currentAngle); // the value gets inverted that the gui can display it correctly
                         }
                     } catch (BO_MOD_DataProcessingException e){
                         Log.e("DataProcessing", e.getMessage());
@@ -122,6 +131,10 @@ This Class is the backend of this app. Bluetooth data and local sensor readings 
 
     public void setAngleListener(AngleListener listener) {
         this.angleListener = listener;
+    }
+
+    public void setDisplayIsHorizontalListener(DisplayIsHorizontalListener listener){
+        this.displayIsHorizontalListener = listener;
     }
 
     public void setIsConnectedListener(IsConnectedListener listener){

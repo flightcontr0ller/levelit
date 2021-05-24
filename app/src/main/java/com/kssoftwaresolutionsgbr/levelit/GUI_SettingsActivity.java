@@ -79,15 +79,20 @@ public class GUI_SettingsActivity extends AppCompatActivity {
     }
 
     private void open_main_activity(){
-    if (valid_input(Float.parseFloat(et_warning_angle.getText().toString()))){
-        SDM.warningAngle = warning_angle;
-        Intent intent = new Intent(this, GUI_MainActivity.class);
-        startActivity(intent);
-    }
-    else{
-        Toast.makeText(getApplicationContext(),  "invalid warning angle", Toast.LENGTH_SHORT).show();
-    }
-
+        if(sw_warning.isChecked()){
+            if (valid_input(Float.parseFloat(et_warning_angle.getText().toString()))){
+                SDM.warningAngle = warning_angle;
+                Intent intent = new Intent(this, GUI_MainActivity.class);
+                startActivity(intent);
+            }
+            else{
+                Toast.makeText(getApplicationContext(),  "invalid warning angle", Toast.LENGTH_SHORT).show();
+            }
+        }
+        else{
+            Intent intent = new Intent(this, GUI_MainActivity.class);
+            startActivity(intent);
+        }
     }
 
     private boolean valid_input(Float raw_input){
