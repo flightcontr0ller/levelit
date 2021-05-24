@@ -26,6 +26,7 @@ public class GUI_SettingsActivity extends AppCompatActivity {
     // fields
     protected BO_APP_SensorDataManagement SDM;
     private Button bt_nav_main;
+    private Button bt_nav_about;
     private Switch sw_extsensor;
     private Switch sw_warning;
     private EditText et_warning_angle;
@@ -41,11 +42,19 @@ public class GUI_SettingsActivity extends AppCompatActivity {
         // Assign backend
         SDM = (BO_APP_SensorDataManagement)getApplication();
 
-        bt_nav_main = findViewById(R.id.bt_nav_main);
+        bt_nav_main = findViewById(R.id.bt_nav_settings_2);
         bt_nav_main.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 open_main_activity();
+            }
+        });
+
+        bt_nav_about = findViewById(R.id.bt_nav_about);
+        bt_nav_about.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                open_about_activity();
             }
         });
 
@@ -93,6 +102,11 @@ public class GUI_SettingsActivity extends AppCompatActivity {
             Intent intent = new Intent(this, GUI_MainActivity.class);
             startActivity(intent);
         }
+    }
+
+    private void open_about_activity(){
+        Intent intent = new Intent(this, GUI_About.class);
+        startActivity(intent);
     }
 
     private boolean valid_input(Float raw_input){
