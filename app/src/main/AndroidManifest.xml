@@ -22,8 +22,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Levelit">
         <activity android:name=".GUI_About"></activity>
-        <activity android:name=".GUI_SettingsActivity" />
-        <activity android:name=".GUI_MainActivity">
+        <activity android:name=".GUI_Settings" />
+        <activity android:name=".GUI_Main">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

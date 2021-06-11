@@ -62,7 +62,7 @@ This activity displays information about the app.
     }
 
     private void open_settings_activity(){
-        Intent intent = new Intent(this, GUI_SettingsActivity.class);
+        Intent intent = new Intent(this, GUI_Settings.class);
         startActivity(intent);
     }
 }

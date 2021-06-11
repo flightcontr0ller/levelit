@@ -21,7 +21,7 @@ import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.Toast;
 
-public class GUI_SettingsActivity extends AppCompatActivity {
+public class GUI_Settings extends AppCompatActivity {
 /*
 This activity includes UI elements to set up the app behavior. It is possible to switch between
 sensors and set a warning at a special angle.
@@ -106,7 +106,7 @@ sensors and set a warning at a special angle.
     }
 
     private void start_main_activity(){
-        Intent intent = new Intent(this, GUI_MainActivity.class);
+        Intent intent = new Intent(this, GUI_Main.class);
         startActivity(intent);
     }
 

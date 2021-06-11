@@ -9,10 +9,7 @@
  */
 package com.kssoftwaresolutionsgbr.levelit;
 
-import androidx.annotation.ColorInt;
-import androidx.annotation.ColorRes;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -23,7 +20,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class GUI_MainActivity extends AppCompatActivity {
+public class GUI_Main extends AppCompatActivity {
     /*
     This activity displays the measured values and warnings. In case of a warning the device
     vibrates additionally.
@@ -129,7 +126,7 @@ public class GUI_MainActivity extends AppCompatActivity {
 
 
     private void open_settings_activity(){
-        Intent intent = new Intent(this, GUI_SettingsActivity.class);
+        Intent intent = new Intent(this, GUI_Settings.class);
         startActivity(intent);
     }
 
